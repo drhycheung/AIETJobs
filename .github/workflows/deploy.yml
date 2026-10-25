@@ -32,8 +32,8 @@ jobs:
       - name: Upload site artifact
         uses: actions/upload-pages-artifact@v3
         with:
-        # The student page and its data live together in site/; deploy that directory directly
-        path: site
+          # The student page and its data live together in site/; deploy that directory directly
+          path: site
 
       - name: Deploy to GitHub Pages
         id: deployment
