@@ -4,6 +4,9 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
+  schedule:
+    # 07:00 Hong Kong time (UTC+8) = 23:00 UTC the previous day
+    - cron: '0 23 * * *'
 
 # Allow the GITHUB_TOKEN to deploy to Pages
 permissions:
@@ -25,6 +28,16 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Refresh job data
+        # If crawling fails, still deploy the last committed site
+        continue-on-error: true
+        run: python scraper/run.py
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
