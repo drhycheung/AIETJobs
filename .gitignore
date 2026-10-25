@@ -1,0 +1,23 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+env/
+
+# Project-internal memory (not part of the published project)
+.workbuddy/
+
+# Secrets / local config
+.env
+*.local
+
+# OS / editor
+.DS_Store
+Thumbs.db
+*.swp
+
+# Build artefacts (none yet)
+dist/
+build/

@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>香港 AI×EdTech 应届岗 · EdUHK BSc(AI&EdTech)</title>
+<style>
+  :root {
+    --bg:#f6f8fb; --card:#ffffff; --ink:#1f2933; --muted:#5b6b7b;
+    --brand:#0b6bcb; --brand2:#0a4f9c; --line:#e2e8f0; --warn:#b45309; --ok:#15803d;
+  }
+  * { box-sizing:border-box; }
+  body { margin:0; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"PingFang HK","Microsoft YaHei",sans-serif;
+         background:var(--bg); color:var(--ink); line-height:1.6; }
+  header { background:linear-gradient(135deg,var(--brand),var(--brand2)); color:#fff; padding:32px 20px; }
+  .wrap { max-width:1040px; margin:0 auto; }
+  header h1 { margin:0 0 6px; font-size:1.7rem; }
+  header p { margin:4px 0; opacity:.95; }
+  main { max-width:1040px; margin:0 auto; padding:24px 20px 60px; }
+  .sub { color:var(--muted); font-size:.9rem; margin:0 0 14px; }
+  .notice { background:#eaf2fc; border:1px solid #cfe2fb; color:#0a4f9c; padding:12px 16px; border-radius:10px; font-size:.9rem; margin:18px 0; }
+  .filter { display:flex; gap:8px; flex-wrap:wrap; margin:16px 0 20px; }
+  .fbtn { background:#fff; border:1px solid var(--line); color:var(--brand2); padding:6px 14px; border-radius:999px; cursor:pointer; font-size:.85rem; }
+  .fbtn.active { background:var(--brand); color:#fff; border-color:var(--brand); }
+  .grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:14px; }
+  .card { background:var(--card); border:1px solid var(--line); border-radius:14px; padding:16px; box-shadow:0 1px 2px rgba(16,24,40,.04); }
+  .card-head { display:flex; justify-content:space-between; align-items:flex-start; gap:8px; }
+  .card-head h3 { margin:0; font-size:1.02rem; }
+  .fit { color:#f59e0b; font-size:1.05rem; white-space:nowrap; }
+  .src { display:inline-block; background:#eef2f7; color:var(--brand2); border:1px solid #d6e2f0;
+         border-radius:999px; padding:1px 8px; font-size:.72rem; margin-top:2px; }
+  .meta { display:flex; flex-direction:column; gap:2px; margin:8px 0; font-size:.85rem; color:var(--muted); }
+  .tags { display:flex; gap:6px; flex-wrap:wrap; margin:8px 0; }
+  .tag { background:#e8f1fb; color:var(--brand2); border:1px solid #cfe2fb; border-radius:6px; padding:2px 8px; font-size:.75rem; }
+  .desc { font-size:.85rem; color:var(--ink); background:#f8fafc; border-left:3px solid var(--brand); padding:6px 10px; border-radius:0 8px 8px 0; margin:8px 0; }
+  .links { display:flex; gap:8px; flex-wrap:wrap; margin-top:6px; }
+  .btn { text-decoration:none; font-size:.85rem; padding:7px 12px; border-radius:8px; }
+  .btn.primary { background:var(--brand); color:#fff; }
+  .btn.ghost { background:#eef2f7; color:var(--brand2); border:1px solid #d6e2f0; }
+  .empty { color:var(--muted); grid-column:1/-1; text-align:center; padding:30px; }
+  .panel { background:var(--card); border:1px solid var(--line); border-radius:14px; padding:18px; margin:24px 0; }
+  .panel h2 { margin-top:0; }
+  .redflags li { color:var(--warn); }
+  footer { text-align:center; color:var(--muted); font-size:.8rem; padding:24px; }
+  code { background:#eef2f7; padding:1px 5px; border-radius:4px; }
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <h1>香港 AI × EdTech 应届岗位推送</h1>
+    <p>面向：香港教育大学 <b>BSc(AI&amp;EdTech)</b> 应届毕业生 · 仅收「本科可投 / Fresh graduate welcome」</p>
+    <p>更新日期：2026-10-25 · 数据经官方链接存活校验</p>
+  </div>
+</header>
+<main>
+  <p class="sub">当前可投岗位：<b id="count">9</b> 个 · 来源：大学官方招聘页 + 香港主流求职网站（JobsDB / CTgoodjobs / Recruit / CPjobs）</p>
+
+  <div class="notice">
+    ⚠️ 本页仅汇总公开招聘<b>元数据、标签与简短简介</b>，不复制职位描述全文。请点击链接核对最新要求、截止日期与申请方式。
+    链接分两类，均经存活校验：<b>「官方原帖」</b>指向雇主 / 学校官方页面；<b>「求职板原帖」</b>来自香港主流求职网站
+    经搜索引擎公开索引发现，其深链有效期较短，请尽快申请并回官方确认。
+  </div>
+
+  <div class="filter" id="filter"><!-- 标签筛选按钮由脚本生成 --></div>
+
+  <div class="grid" id="grid"><!-- 岗位卡片由脚本生成 --></div>
+
+  <section class="panel">
+    <h2>🛡️ 防骗提示（求职红旗）</h2>
+    <ul class="redflags">
+      <li>要求先交费 / 押金、购买产品才能入职</li>
+      <li>索取身份证、银行户口或密码等敏感资料</li>
+      <li>仅以私人邮箱（如 Gmail / 126）联系，无公司域名</li>
+      <li>薪酬明显偏离市场行情（过高或过低）</li>
+    </ul>
+    <p>二次核查：香港网络安全防骗视伏器 <a href="https://cyberdefender.hk/scameter/" target="_blank" rel="noopener">Scameter ↗</a></p>
+  </section>
+
+  <section class="panel">
+    <h2>📋 数据来源与合规</h2>
+    <p><b>允许来源（白名单）：</b>香港教育大学 EdUHK、香港科技大学 HKUST、香港中文大学 CUHK、香港大学 HKU、香港理工大学 PolyU、香港城市大学 CityU、香港浸会大学 HKBU、岭南大学 LingnanU、香港树仁大学 HKSYU、香港劳工处 jobs.gov.hk。</p>
+    <p><b>排除来源：</b>bebee.com、careers.sh、glassdoor.com、gradconnection.com、hirelala.com、hiringcafe.com、hkese.net、imerit.com、indeed.com、jobfinder.com、joblum.com、jobstreet.com、linkedin.com、offertoday.com、postjobfree.com、sigma.ai、thebigjobsite.com、ziprecruiter.com 等聚合 / 抓取 / 博客站（仅当线索，回官方复核后才收录）。</p>
+    <p>本项目为非商业、教育用途的公开信息聚合工具：仅直接抓取各大学官方招聘页与香港劳工处等公开数据；
+    商业求职板经搜索引擎公开索引发现、仅提供链接、不作 bot 直爬、不绕过任何验证；每日低频访问、遵守
+    <code>robots.txt</code>、使用可识别 User-Agent 并附联系邮箱；仅发布岗位元数据、标签与简短简介，不复制 JD 全文，
+    不采集任何个人资料。如有疑问或下架请求，请联系 <code>jobs-bot@eduhk.hk</code>。</p>
+  </section>
+</main>
+<footer>
+  由 EdUHK-AIEdTech-JobBot 生成 · 2026-10-25 · 仅供参考，最终以雇主 / 学校官方信息为准
+</footer>
+
+<script>
+const FALLBACK = [{"title": "Research Assistant II", "employer": "The Education University of Hong Kong (EdUHK)", "department": "Centre for Learning, Teaching and Technology", "category": 1, "category_name": "大学里的 AI / EdTech", "location": "Hong Kong", "degree": "Bachelor (fresh graduate welcome)", "experience": "Not specified / entry-level", "ai_edtech_fit": 3, "fit_reason": "类别=大学里的 AI / EdTech；命中关键词：education, learning, teaching", "tags": ["大学", "应届友好"], "description": "The appointee will participate in a research project focused on boundary constraint mechanisms and knowledge editing techniques for regulated LLM role-play generation. He/she will be responsible for • conducting data-dri…", "discover_source": "EdUHK official vacancies", "official_link": "https://eduhk.hk/cms/f/career/35042/RAII_LTTC_2600894.pdf", "official_type": "employer_official", "posted_date": "20 Oct 2026", "deadline": "03 Nov 2026", "verified_date": "2026-10-25", "status": "active", "compliance_note": "JD（PDF）未见硬性经验/高学历门槛", "excluded_reason": null, "notes": "链接校验通过：HTTP 200"}, {"title": "Educational Development Officer", "employer": "The Education University of Hong Kong (EdUHK)", "department": "Artificial Intelligence and Digital Competency Education Centre", "category": 1, "category_name": "大学里的 AI / EdTech", "location": "Hong Kong", "degree": "Bachelor (fresh graduate welcome)", "experience": "Not specified / entry-level", "ai_edtech_fit": 3, "fit_reason": "类别=大学里的 AI / EdTech；命中关键词：artificial intelligence, education, educational", "tags": ["人工智能", "大学", "应届友好"], "description": "The appointee will be responsible for providing administrative support to a Taught Postgraduate programme. Duties include handling programme admission, preparing promotion al materials; writing reports; addressing studen…", "discover_source": "EdUHK official vacancies", "official_link": "https://eduhk.hk/cms/f/career/35044/EDO_AIDCEC_2600925.pdf", "official_type": "employer_official", "posted_date": "20 Oct 2026", "deadline": "27 Oct 2026", "verified_date": "2026-10-25", "status": "active", "compliance_note": "JD（PDF）未见硬性经验/高学历门槛", "excluded_reason": null, "notes": "链接校验通过：HTTP 200"}, {"title": "Multimedia Developer", "employer": "The Education University of Hong Kong (EdUHK)", "department": "Faculty of Education and Human Development", "category": 1, "category_name": "大学里的 AI / EdTech", "location": "Hong Kong", "degree": "Bachelor (fresh graduate welcome)", "experience": "Not specified / entry-level", "ai_edtech_fit": 2, "fit_reason": "类别=大学里的 AI / EdTech；命中关键词：education, multimedia", "tags": ["多媒体", "大学", "应届友好"], "description": "The appointee will work closely with the e -learning team to support the implementation of the University’s strategic digital learning initiatives and actively contribute to AI -integrated pedagogical innovation. He/She…", "discover_source": "EdUHK official vacancies", "official_link": "https://eduhk.hk/cms/f/career/35050/PO_ProjA_FEHD_2600928.pdf", "official_type": "employer_official", "posted_date": "21 Oct 2026", "deadline": "04 Nov 2026", "verified_date": "2026-10-25", "status": "active", "compliance_note": "JD（PDF）未见硬性经验/高学历门槛", "excluded_reason": null, "notes": "链接校验通过：HTTP 200"}, {"title": "Teaching Assistant", "employer": "The Education University of Hong Kong (EdUHK)", "department": "Department of Curriculum and Instruction", "category": 1, "category_name": "大学里的 AI / EdTech", "location": "Hong Kong", "degree": "Bachelor (fresh graduate welcome)", "experience": "Not specified / entry-level", "ai_edtech_fit": 2, "fit_reason": "类别=大学里的 AI / EdTech；命中关键词：education, teaching", "tags": ["教学", "大学", "应届友好"], "description": "Successful applicants will become part of a team of highly qualified educators, contributing to a wide variety of learning and teaching activities. Their responsibilities mainly include Teaching Administrative Support Du…", "discover_source": "EdUHK official vacancies", "official_link": "https://eduhk.hk/cms/f/career/35022/TAsst_C%26I_2600918.pdf", "official_type": "employer_official", "posted_date": "15 Oct 2026", "deadline": "29 Oct 2026", "verified_date": "2026-10-25", "status": "active", "compliance_note": "JD（PDF）未见硬性经验/高学历门槛", "excluded_reason": null, "notes": "链接校验通过：HTTP 200"}, {"title": "Research Assistant I/II (Part-time)", "employer": "The Education University of Hong Kong (EdUHK)", "department": "Department of Social Sciences and Policy Studies", "category": 1, "category_name": "大学里的 AI / EdTech", "location": "Hong Kong", "degree": "Bachelor (fresh graduate welcome)", "experience": "Not specified / entry-level", "ai_edtech_fit": 1, "fit_reason": "类别=大学里的 AI / EdTech；命中关键词：education", "tags": ["大学", "实习／培训生", "应届友好"], "description": "The applicant will be required to conduct research tasks including data collection, data analysis, literature review, and research -related duties as assigned by Principal Investigator or his delegates. There will be opp…", "discover_source": "EdUHK official vacancies", "official_link": "https://eduhk.hk/cms/f/career/35073/RAI_RAII_SSPS_2600932.pdf", "official_type": "employer_official", "posted_date": "23 Oct 2026", "deadline": "06 Nov 2026", "verified_date": "2026-10-25", "status": "active", "compliance_note": "JD（PDF）未见硬性经验/高学历门槛", "excluded_reason": null, "notes": "链接校验通过：HTTP 200"}, {"title": "Java Developer", "employer": "FDM Group HK Limited", "department": "", "category": 3, "category_name": "单纯人工智能", "location": "Hong Kong", "degree": "Bachelor (IT / Computer Science or related)", "experience": "Work experience not required", "ai_edtech_fit": 1, "fit_reason": "类别=单纯人工智能；通用 AI/数据岗", "tags": ["业界", "应届友好"], "description": "FDM 的毕业生培训计划：零经验亦可，提供 Java 等技术认证与在岗训练，派驻合作企业担任开发岗。", "discover_source": "Recruit（求职板发现）", "official_link": "http://recruit.com.hk/jobseeker/JobDetail.aspx?jobOrder=L060421659", "official_type": "commercial_board", "posted_date": "2026-01-21", "deadline": null, "verified_date": "2026-10-25", "status": "active", "compliance_note": "JD（页面 HTML）未见硬性经验/高学历门槛", "excluded_reason": null, "notes": "链接校验通过：HTTP 200"}, {"title": "Analyst Programmer", "employer": "Society of Rehabilitation and Crime Prevention, HK (SRACP)", "department": "Wan Chai", "category": 3, "category_name": "单纯人工智能", "location": "Hong Kong", "degree": "Bachelor (IT or related fields)", "experience": "Entry-level welcome (AI / Big Data / IoT exposure)", "ai_edtech_fit": 1, "fit_reason": "类别=单纯人工智能；命中关键词：ai", "tags": ["人工智能", "业界", "应届友好"], "description": "协助机构开发及维护资讯系统；欢迎具 AI / 大数据 / 物联网背景的应届生，入职由资深同事带教。", "discover_source": "Recruit（求职板发现）", "official_link": "http://recruit.com.hk/jobseeker/JobDetail.aspx?jobOrder=L059335869", "official_type": "commercial_board", "posted_date": null, "deadline": null, "verified_date": "2026-10-25", "status": "active", "compliance_note": "JD（页面 HTML）未见硬性经验/高学历门槛", "excluded_reason": null, "notes": "链接校验通过：HTTP 200"}, {"title": "Project Consultant Trainee (Web Solution)", "employer": "TOGO Pacific Limited", "department": "Kwun Tong", "category": 3, "category_name": "单纯人工智能", "location": "Hong Kong", "degree": "Degree in Business, IT, or related", "experience": "Fresh graduates welcome", "ai_edtech_fit": 1, "fit_reason": "类别=单纯人工智能；命中关键词：ai", "tags": ["人工智能", "业界", "实习／培训生", "应届友好"], "description": "Web 方案方向培训生：参与客户需求分析、网站/系统方案设计与落地，无需经验，提供在职培训。", "discover_source": "Recruit（求职板发现）", "official_link": "http://recruit.com.hk/job-detail/togo-pacific-limited/project-consultant-trainee-web-solution/L0601125520", "official_type": "commercial_board", "posted_date": null, "deadline": null, "verified_date": "2026-10-25", "status": "active", "compliance_note": "JD（页面 HTML）未见硬性经验/高学历门槛", "excluded_reason": null, "notes": "链接校验通过：HTTP 200"}, {"title": "IT Intern (Programming) (Part-time)", "employer": "The Education University of Hong Kong (EdUHK)", "department": "Office of the Chief Information Officer", "category": 3, "category_name": "单纯人工智能", "location": "Hong Kong", "degree": "Bachelor (fresh graduate welcome)", "experience": "Not specified / entry-level", "ai_edtech_fit": 1, "fit_reason": "类别=单纯人工智能；命中关键词：education", "tags": ["大学", "实习／培训生", "应届友好"], "description": "The appointees will be responsible for the program ming tasks for a broad spectrum of Enterprise Resource Planning projects such as Financial and Human Resources System (using Oracle e - Business Suite), Student Informat…", "discover_source": "EdUHK official vacancies", "official_link": "https://eduhk.hk/cms/f/career/32500/SH_OCIO_2501246.pdf", "official_type": "employer_official", "posted_date": "02 Dec 2025", "deadline": null, "verified_date": "2026-10-25", "status": "active", "compliance_note": "JD（PDF）未见硬性经验/高学历门槛", "excluded_reason": null, "notes": "链接校验通过：HTTP 200"}];
+function esc(s){ return String(s==null?'':s).replace(/[&<>"]/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+function stars(n){ n=+n||0; return '★'.repeat(n)+'☆'.repeat(3-n); }
+function boardHome(link){ try{ return 'https://'+new URL(link).hostname+'/'; }catch(e){ return 'https://recruit.com.hk/'; } }
+function cardHTML(j){
+  const tags=(j.tags||[]).map(t=>'<span class="tag">'+esc(t)+'</span>').join('');
+  const isOff=j.official_type==='employer_official';
+  const pLabel=isOff?'官方原帖 ↗':'求职板原帖 ↗';
+  const gLabel=isOff?'大学空缺总页 ↗':'求职板总页 ↗';
+  const gHref=isOff?'https://eduhk.hk/en/current-openings':boardHome(j.official_link);
+  const src='<span class="src">'+esc(j.discover_source||'')+'</span>';
+  const desc=j.description?'<p class="desc">'+esc(j.description)+'</p>':'';
+  const dl=j.deadline||'N/A（持续招聘）';
+  const dept=j.department?'<span>📂 '+esc(j.department)+'</span>':'';
+  return '<article class="card" data-tags="'+((j.tags||[]).map(esc).join(' '))+'">'
+    +'<div class="card-head"><h3>'+esc(j.title)+'</h3><span class="fit" title="契合度">'+stars(j.ai_edtech_fit)+'</span></div>'
+    +'<div class="meta"><span>🏛️ '+esc(j.employer)+'</span>'+dept+'<span>📍 '+esc(j.location||'')+'</span><span>⏰ 截止：'+esc(dl)+'</span>'+src+'</div>'
+    +'<div class="tags">'+tags+'</div>'+desc
+    +'<div class="links"><a class="btn primary" href="'+esc(j.official_link)+'" target="_blank" rel="noopener">'+pLabel+'</a>'
+    +'<a class="btn ghost" href="'+esc(gHref)+'" target="_blank" rel="noopener">'+gLabel+'</a></div>'
+    +'</article>';
+}
+let ACTIVE=[]; let FILTER=new Set();
+function allTags(list){ const s=new Set(); list.forEach(j=>(j.tags||[]).forEach(t=>s.add(t))); return [...s].sort(); }
+function renderFilter(list){
+  const tags=allTags(list);
+  let html='<button class="fbtn active" data-t="">全部</button>';
+  tags.forEach(t=>{ html+='<button class="fbtn" data-t="'+esc(t)+'">'+esc(t)+'</button>'; });
+  const box=document.getElementById('filter'); box.innerHTML=html;
+  box.querySelectorAll('.fbtn').forEach(b=>b.onclick=()=>{
+    const t=b.getAttribute('data-t');
+    FILTER=new Set(t?[t]:[]);
+    box.querySelectorAll('.fbtn').forEach(x=>x.classList.toggle('active', x.getAttribute('data-t')===t));
+    renderGrid();
+  });
+}
+function renderGrid(){
+  const list=ACTIVE.filter(j=>FILTER.size===0||(j.tags||[]).some(t=>FILTER.has(t)));
+  document.getElementById('grid').innerHTML = list.map(cardHTML).join('') || '<p class="empty">该标签下暂时没有岗位。</p>';
+  document.getElementById('count').textContent=list.length;
+}
+function render(list){
+  ACTIVE=list.slice().sort((a,b)=>((+b.ai_edtech_fit||0)-(+a.ai_edtech_fit||0)) || ((a.deadline||'9')<(b.deadline||'9')?-1:1));
+  renderFilter(ACTIVE); renderGrid();
+}
+render(FALLBACK);
+fetch('./jobs.json').then(r=>r.ok?r.json():Promise.reject()).then(d=>{
+  render((d.jobs||[]).filter(j=>j.status==='active'));
+}).catch(()=>{ /* 静态预览无服务器时用内嵌备份数据 */ });
+</script>
+</body>
+</html>
