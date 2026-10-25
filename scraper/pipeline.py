@@ -1,9 +1,10 @@
 """
-pipeline.py — 去重 / 分类 / ⭐ 契合度评分 / 合规过滤 / 排序
-核心原则（AGENTS.md）：
-- 仅收「本科可投 / fresh graduate welcome」岗位
-- 程序化过滤：需经验/执照/硕士、已截止、链接失效、非香港、非白名单
-- 最终链接必须是官方原帖，并经 is_live 校验
+pipeline.py — Deduplication / categorisation / star fit-score / compliance filter / sorting
+Core principles (see AGENTS.md):
+- Only collect posts that are "open to bachelor graduates / fresh graduate welcome".
+- Programmatic filtering: requires experience / licence / Master's, already closed,
+  dead link, non-Hong Kong, or not whitelisted.
+- The final link must be the official post and must pass is_live verification.
 """
 from __future__ import annotations
 
@@ -26,7 +27,7 @@ except Exception:
 
 
 # ---------------------------------------------------------------------------
-# 分类
+# Categorisation
 # ---------------------------------------------------------------------------
 def _text_of(job: dict) -> str:
     return " ".join([
@@ -36,9 +37,10 @@ def _text_of(job: dict) -> str:
 
 
 def assign_category(job: dict) -> tuple[int, int]:
-    """返回 (最佳类别, 该类别关键词命中数)。命中数=0 表示与五类方向无关。"""
+    """Return (best category, keyword hit count for that category).
+    A hit count of 0 means no match with the five directions."""
     text = _text_of(job)
-    best, best_score = 3, 0  # 默认归入「单纯人工智能」并靠评分区分
+    best, best_score = 3, 0  # Default to "Pure AI / ML" and differentiate by score
     for cat_id, meta in config.CATEGORIES.items():
         score = sum(1 for kw in meta["keywords"] if kw.lower() in text)
         if score > best_score:
@@ -47,7 +49,7 @@ def assign_category(job: dict) -> tuple[int, int]:
 
 
 # ---------------------------------------------------------------------------
-# ⭐ 契合度评分（BSc AI&EdTech 能力画像）
+# Star fit-score (BSc AI&EdTech competency profile)
 # ---------------------------------------------------------------------------
 _STRONG = {"ai", "artificial intelligence", "machine learning", "ml", "nlp",
            "education", "educational", "edtech", "learning", "teaching",
@@ -64,19 +66,19 @@ def fit_score(job: dict, cat_score: int = 0) -> tuple[int, str]:
             raw += 2 if kw.lower() in _STRONG else 1
     cat = assign_category(job)[0]
     cat_name = config.CATEGORIES[cat]["name"]
-    # 大学 / 同领域岗优先
+    # Prefer university / same-field posts
     if "eduhk" in job.get("official_link", "") or "university" in job.get("employer", "").lower():
         raw += 1
     stars = 1 if raw >= 1 else 0
     stars = 2 if raw >= 4 else stars
     stars = 3 if raw >= 7 else stars
     stars = max(stars, 1)
-    reason = "命中关键词：" + ", ".join(hits[:6]) if hits else "通用 AI/数据岗"
-    return stars, f"类别={cat_name}；{reason}"
+    reason = "matched keywords: " + ", ".join(hits[:6]) if hits else "general AI/data post"
+    return stars, f"Category = {cat_name}; {reason}"
 
 
 # ---------------------------------------------------------------------------
-# 合规：从官方 PDF 抽取文本，检查经验/学历要求
+# Compliance: extract text from the official PDF and check experience / degree
 # ---------------------------------------------------------------------------
 def _extract_pdf_text(url: str) -> str | None:
     if not _HAVE_PYPDF:
@@ -92,7 +94,8 @@ def _extract_pdf_text(url: str) -> str | None:
 
 
 def _extract_html_text(url: str) -> str | None:
-    """商业求职板深链无 PDF，退而抓取页面 HTML 扫描经验/学历信号。"""
+    """Commercial job-board deep links have no PDF, so fall back to scraping the
+    page HTML to scan for experience / degree signals."""
     status, html_text = fetch.fetch_url(url)
     if status != 200 or not html_text:
         return None
@@ -100,17 +103,19 @@ def _extract_html_text(url: str) -> str | None:
 
 
 def _get_jd_text(job: dict) -> str | None:
-    """取一次 JD 文本：官方岗取 PDF，商业板取页面 HTML（供合规 + 简介共用）。"""
+    """Fetch the JD text once: official posts use the PDF, job-board posts use
+    page HTML (shared by compliance check and description extraction)."""
     if job.get("official_type") == "employer_official":
         return _extract_pdf_text(job.get("official_link", ""))
     return _extract_html_text(job.get("official_link", ""))
 
 
 def _summarize(text: str, limit: int = 220) -> str:
-    """从 JD 文本抽取一句简短职责简介（不含薪资/编号等表头噪声）。"""
+    """Extract one short responsibility summary from the JD text
+    (excluding header noise such as salary / reference numbers)."""
     if not text:
         return ""
-    # 优先找职责段落
+    # Prefer a responsibilities paragraph
     paras = re.split(r"\n\s*\n|(?:\r\n)+", text)
     best = None
     for p in paras:
@@ -137,7 +142,8 @@ def _summarize(text: str, limit: int = 220) -> str:
 
 
 def _build_description(job: dict, jd_text: str | None) -> str:
-    """岗位简介：优先用发现时附带的 description；否则从 JD 文本摘要。"""
+    """Job description: prefer the description attached at discovery time;
+    otherwise summarise from the JD text."""
     if job.get("description"):
         return job["description"].strip()
     if jd_text:
@@ -146,7 +152,8 @@ def _build_description(job: dict, jd_text: str | None) -> str:
 
 
 def assign_tags(job: dict) -> list[str]:
-    """为多标签展示动态生成标签（方向标签 + 角色/来源标签）。"""
+    """Dynamically generate tags for the multi-tag display
+    (direction tags + role / source tags)."""
     text = _text_of(job)
     tags: list[str] = []
     for label, kws in config.DIRECTION_TAGS.items():
@@ -156,16 +163,16 @@ def assign_tags(job: dict) -> list[str]:
     exp = (job.get("experience", "") or "").lower()
     employer = (job.get("employer", "") or "").lower()
     if job.get("official_type") == "employer_official" and "university" in employer:
-        tags.append("大学")
+        tags.append("University")
     elif job.get("official_type") == "commercial_board":
-        tags.append("业界")
+        tags.append("Industry")
     if any(k in title_l for k in ("intern", "trainee", "part-time", "part time",
                                   "实习", "培训生", "培训生")):
-        tags.append("实习／培训生")
+        tags.append("Intern / Trainee")
     if any(k in exp for k in ("not required", "fresh graduate", "entry-level",
                               "welcome", "not specified")):
-        tags.append("应届友好")
-    # 去重保序
+        tags.append("Fresh-graduate friendly")
+    # Deduplicate while preserving order
     seen: set[str] = set()
     out: list[str] = []
     for t in tags:
@@ -176,34 +183,36 @@ def assign_tags(job: dict) -> list[str]:
 
 
 def compliance_check(job: dict, jd_text: str | None = None) -> tuple[bool, str]:
-    """返回 (是否保留, 说明)。jd_text 可由调用方预取以复用（避免重复下载）。"""
+    """Return (keep, explanation). jd_text may be pre-fetched by the caller
+    to avoid downloading it twice."""
     title = job.get("title", "").lower()
-    # 0) 学术/教职头衔（需博士，非本科应届生目标）
+    # 0) Academic / faculty titles (require a PhD; not for fresh bachelor graduates)
     for term in config.ACADEMIC_REJECT:
         if term in title:
-            return False, f"学术/教职岗（通常需博士）「{term}」"
-    # 1) 标题硬性拒绝（资深/管理/需经验）
+            return False, f"Academic/faculty post (usually requires a PhD): '{term}'"
+    # 1) Hard title rejection (seniority / management / experience required)
     for term in config.EXPERIENCE_REJECT:
         if term in title:
-            return False, f"标题含资深/经验信号「{term.strip()}」"
-    # 2) 非香港（基于标题/部门/雇主）
+            return False, f"Title signals seniority / experience: '{term.strip()}'"
+    # 2) Non-Hong Kong (based on title / department / employer)
     text = _text_of(job)
     for sig in config.NON_HK_SIGNALS:
         if sig in text:
-            return False, f"疑似非香港岗位「{sig}」"
-    # 3) 官方 JD 文本深度检查（经验/学历）：优先 PDF，其次页面 HTML
+            return False, f"Likely non-Hong Kong post: '{sig}'"
+    # 3) Deep check of the official JD text (experience / degree): PDF first, then page HTML
     scan = jd_text
-    src = "PDF" if job.get("official_type") == "employer_official" else "页面 HTML"
+    src = "PDF" if job.get("official_type") == "employer_official" else "page HTML"
     if scan is None:
         scan = _extract_pdf_text(job.get("official_link", ""))
         src = "PDF"
     if scan is None:
         scan = _extract_html_text(job.get("official_link", ""))
-        src = "页面 HTML"
+        src = "page HTML"
     if scan is None:
-        return True, "（未取到 JD 文本，建议学生自行核对要求）"
+        return True, "(JD text not retrieved; students should verify requirements themselves)"
     pl = scan.lower()
-    # 学历要求需是「硬性要求」才算拒绝；「a plus / preferred / advantage」不算。
+    # A degree requirement counts as a rejection only when it is a hard requirement;
+    # "a plus / preferred / advantage" does not count.
     _DEG_REQ = re.compile(
         r"(master'?s?|m\.?sc|m\.?phil|ph\.?d|doctorate|postgraduate).{0,45}?"
         r"(required|must|essential|minimum|necessar|qualif)", re.I)
@@ -216,9 +225,10 @@ def compliance_check(job: dict, jd_text: str | None = None) -> tuple[bool, str]:
         if hit:
             window = pl[hit.start(): hit.start() + 90]
             if not _NEG.search(window):
-                return False, f"JD 要求较高学历「{term}」"
-    # 经验要求：必须是「岗位硬性要求」语境，且非「not required」否定；
-    # 排除公司简介里的「30+ years of experience」等噪声。
+                return False, f"JD requires an advanced degree: '{term}'"
+    # Experience requirement: must be in a "hard job requirement" context and not
+    # negated by "not required"; exclude noise such as "30+ years of experience"
+    # found in company profiles.
     _EXP1 = re.compile(
         r"(\d+)\s*\+?\s*years?'?\s*(?:of\s*)?experience\s+"
         r"(?:as a|as an|in|working|required|within)", re.I)
@@ -228,26 +238,26 @@ def compliance_check(job: dict, jd_text: str | None = None) -> tuple[bool, str]:
     _NEGEXP = re.compile(r"not required|no .{0,15}experience|experience (?:is )?not", re.I)
     m = _EXP1.search(pl) or _EXP2.search(pl)
     if m and not _NEGEXP.search(pl[max(0, m.start() - 50): m.start() + 80]):
-        return False, "JD 要求多年经验"
-    return True, f"JD（{src}）未见硬性经验/高学历门槛"
+        return False, "JD requires several years of experience"
+    return True, f"JD ({src}) shows no hard experience / advanced-degree requirement"
 
 
 # ---------------------------------------------------------------------------
-# 链接存活校验
+# Link liveness verification
 # ---------------------------------------------------------------------------
 def verify(job: dict) -> None:
     live, note = fetch.is_live(job.get("official_link", ""))
     job["verified_date"] = __import__("datetime").date.today().isoformat()
     if not live:
         job["status"] = "expired"
-        job["notes"] = (job.get("notes", "") + f" 链接校验失败：{note}").strip()
+        job["notes"] = (job.get("notes", "") + f" Link verification failed: {note}").strip()
     else:
         job["status"] = "active"
-        job["notes"] = (job.get("notes", "") + f" 链接校验通过：{note}").strip()
+        job["notes"] = (job.get("notes", "") + f" Link verified: {note}").strip()
 
 
 # ---------------------------------------------------------------------------
-# 主流程
+# Main pipeline
 # ---------------------------------------------------------------------------
 def _dedupe_key(job: dict) -> str:
     return (job.get("title", "").strip().lower(), job.get("employer", "").strip().lower())
@@ -255,7 +265,7 @@ def _dedupe_key(job: dict) -> str:
 
 def run() -> list[dict]:
     raw = collect_all()
-    print(f"[pipeline] 原始岗位 {len(raw)} 条")
+    print(f"[pipeline] raw jobs: {len(raw)}")
 
     seen = {}
     for job in raw:
@@ -265,8 +275,9 @@ def run() -> list[dict]:
         stars, reason = fit_score(job, cat_score)
         job["ai_edtech_fit"] = stars
         job["fit_reason"] = reason
-        # 相关性闸门（基于「标题」，避免部门含关键词误放行行政岗）：
-        # 标题未命中任一方向关键词 且 未命中角色相关性关键词 → 与目标人群无关
+        # Relevance gate (based on the title, to avoid department keywords
+        # wrongly letting administrative roles through): if the title matches no
+        # direction keyword and no role-relevance keyword, it is off-target.
         title_l = job.get("title", "").lower()
         cat_title_score = sum(
             1 for meta in config.CATEGORIES.values()
@@ -275,7 +286,7 @@ def run() -> list[dict]:
         rel_hit = any(k in title_l for k in config.RELEVANCE_KEYWORDS)
         if cat_title_score == 0 and not rel_hit:
             job["status"] = "excluded"
-            job["excluded_reason"] = "与 AI/EdTech/数据/教学五类方向无关键词关联"
+            job["excluded_reason"] = "No keyword match with the AI/EdTech/data/teaching directions"
             seen[_dedupe_key(job)] = job
             continue
         jd_text = _get_jd_text(job)
@@ -286,7 +297,7 @@ def run() -> list[dict]:
             job["excluded_reason"] = why
             seen[_dedupe_key(job)] = job
             continue
-        # 简介 + 标签（供学生页展示）
+        # Description + tags (for the student page)
         job["description"] = _build_description(job, jd_text)
         job["tags"] = assign_tags(job)
         verify(job)
@@ -296,7 +307,7 @@ def run() -> list[dict]:
         seen[k] = job
 
     jobs = list(seen.values())
-    # 排序：活跃优先 → 契合度 → 截止日近优先
+    # Sort: active first -> fit score -> sooner deadline first
     def sort_key(j):
         active = 0 if j.get("status") == "active" else 1
         stars = -(j.get("ai_edtech_fit", 0))
@@ -305,8 +316,8 @@ def run() -> list[dict]:
     jobs.sort(key=sort_key)
 
     active = [j for j in jobs if j.get("status") == "active"]
-    print(f"[pipeline] 合规后保留 {len(active)} 条（活跃），"
-          f"剔除/待复核 {len(jobs) - len(active)} 条")
+    print(f"[pipeline] kept {len(active)} active after compliance; "
+          f"excluded / pending review: {len(jobs) - len(active)}")
     return jobs
 
 

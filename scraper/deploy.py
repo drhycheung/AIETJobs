@@ -1,8 +1,9 @@
 """
-deploy.py — 发布到 GitHub Pages（gh-pages 分支）。
-审查期：PUSH_GITHUB=False，默认不推送，仅打印指引。
-启用条件：config.PUSH_GITHUB=True 且提供 GH_TOKEN（repo 权限）、GH_OWNER。
-注意：GitHub 写操作建议在云端运行时 / 用户提供的 PAT 下执行，不在沙箱硬跑 OAuth。
+deploy.py — Publish to GitHub Pages (gh-pages branch).
+Review period: PUSH_GITHUB=False, so by default it does not push and only prints guidance.
+Enabled when: config.PUSH_GITHUB=True and GH_TOKEN (repo scope) and GH_OWNER are provided.
+Note: GitHub write operations should run in the cloud runtime / with a user-provided PAT,
+not by forcing OAuth inside the sandbox.
 """
 from __future__ import annotations
 
@@ -16,15 +17,16 @@ import config
 
 def push() -> bool:
     if not config.PUSH_GITHUB:
-        print("[deploy] PUSH_GITHUB=False（审查期）→ 不推送 GitHub，仅本地产出。")
+        print("[deploy] PUSH_GITHUB=False (review period) -> not pushing to GitHub; local output only.")
         return False
     if not config.GH_TOKEN or not config.GH_OWNER:
-        print("[deploy] 缺少 GH_TOKEN / GH_OWNER，无法推送。请在 config 或环境变量中配置。")
+        print("[deploy] Missing GH_TOKEN / GH_OWNER; cannot push. Configure them in config or env vars.")
         return False
-    # TODO: 实际推送由云端运行时执行：
+    # TODO: actual push is performed by the cloud runtime:
     #   git add site data && git commit && git subtree push ... gh-pages
-    # 此处仅占位，避免沙箱内硬跑 OAuth（见 AGENTS.md §5 坑 #6）。
-    print("[deploy] 推送逻辑待在云端运行时执行（GH_TOKEN 已配置）。")
+    # This is only a placeholder, to avoid forcing OAuth inside the sandbox
+    # (see AGENTS.md section 5, pitfall #6).
+    print("[deploy] Push logic to be executed by the cloud runtime (GH_TOKEN configured).")
     return False
 
 

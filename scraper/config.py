@@ -1,31 +1,35 @@
 """
-config.py — AIETJobs 中央配置
-香港教育大学 BSc(AI&EdTech) 应届生 AI/EdTech 岗位每日推送系统
+config.py — Central configuration for AIETJobs
+Daily push system for Hong Kong AI / EdTech graduate jobs, aimed at
+BSc(AI&EdTech) final-year students of The Education University of Hong Kong (EdUHK).
 
-合规原则（详见 AGENTS.md §2）：
-- 仅从白名单来源「发现」岗位
-- 推送给学生的「最终链接」必须是雇主/学校官方原帖
-- 香港主流求职网站（JobsDB / CTgoodjobs / Recruit / CPjobs）**已纳入白名单且启用发现**：
-  仅经搜索引擎公开索引「发现」帖子链接，不直爬、不绕过任何验证；
-  商业板深链有效期短，每日重新发现，并以「求职板原帖」如实标注（区别于雇主官方原帖）
-- 发布仅元数据 + 链接，不复制 JD 全文，不采集个人资料
+Compliance principles (see AGENTS.md section 2):
+- Only "discover" jobs from whitelisted sources.
+- The final link shown to students must be the employer / university official post.
+- Major Hong Kong job boards (JobsDB / CTgoodjobs / Recruit / CPjobs) are whitelisted
+  and discovery is enabled: their post links are found only through public search-engine
+  indexing (never scraped directly, never bypassing any verification); such links are
+  labelled honestly as "job-board post" and re-discovered daily because they expire fast.
+- Only metadata + links are published; no full job-description text; no personal data.
 """
 
 # ---------------------------------------------------------------------------
-# 可识别的 User-Agent（透明、可联系）
+# Identifiable User-Agent (transparent and contactable)
 # ---------------------------------------------------------------------------
 USER_AGENT = (
     "Mozilla/5.0 (compatible; EdUHK-AIEdTech-JobBot/1.0; "
-    "+https://github.com/drhycheung/AIETJobs; contact: jobs-bot@eduhk.hk)"
+    "+https://github.com/drhycheung/AIETJobs; contact: hyincheung@eduhk.hk)"
 )
-CONTACT_EMAIL = "jobs-bot@eduhk.hk"
+CONTACT_EMAIL = "hyincheung@eduhk.hk"
+CONTACT_NAME = "Dr. HY Cheung"
 PROJECT_URL = "https://github.com/drhycheung/AIETJobs"
 
 # ---------------------------------------------------------------------------
-# 信息来源白名单
+# Information source whitelist
 # ---------------------------------------------------------------------------
-# 香港主流求职网站（已启用「发现」：经搜索引擎公开索引发现帖子链接，
-# 不直爬、不绕过验证；发现的链接作「求职板原帖」如实标注，每日重新发现）
+# Major Hong Kong job boards (discovery enabled: found through public search-engine
+# indexing only, never scraped directly or bypassing verification; discovered links
+# are labelled honestly as "job-board post" and re-discovered daily).
 COMMERCIAL_DISCOVERY_ENABLED = True
 COMMERCIAL_BOARDS = {
     "jobsdb.com": "JobsDB",
@@ -34,82 +38,85 @@ COMMERCIAL_BOARDS = {
     "cpjobs.com": "CPjobs",
 }
 
-# 香港劳工处官方（可直接合规抓取）
+# Hong Kong Labour Department official site (directly and compliantly scrapeable)
 GOV_SOURCES = {
-    "jobs.gov.hk": "香港劳工处 jobs.gov.hk",
+    "jobs.gov.hk": "Hong Kong Labour Department jobs.gov.hk",
 }
 
-# 香港各大学官方空缺/招聘页（白名单，可直接合规抓取）
+# Official vacancy / recruitment pages of Hong Kong universities (whitelisted,
+# directly and compliantly scrapeable)
 UNIVERSITY_SOURCES = {
-    "eduhk.hk": "香港教育大学 EdUHK",
-    "hkust.edu.hk": "香港科技大学 HKUST",
-    "cuhk.edu.hk": "香港中文大学 CUHK",
-    "hku.hk": "香港大学 HKU",
-    "polyu.edu.hk": "香港理工大学 PolyU",
-    "cityu.edu.hk": "香港城市大学 CityU",
-    "hkbu.edu.hk": "香港浸会大学 HKBU",
-    "ln.edu.hk": "岭南大学 LingnanU",
-    "hkisyu.edu.hk": "香港树仁大学 HKSYU",
+    "eduhk.hk": "The Education University of Hong Kong (EdUHK)",
+    "hkust.edu.hk": "Hong Kong University of Science and Technology (HKUST)",
+    "cuhk.edu.hk": "Chinese University of Hong Kong (CUHK)",
+    "hku.hk": "University of Hong Kong (HKU)",
+    "polyu.edu.hk": "Hong Kong Polytechnic University (PolyU)",
+    "cityu.edu.hk": "City University of Hong Kong (CityU)",
+    "hkbu.edu.hk": "Hong Kong Baptist University (HKBU)",
+    "ln.edu.hk": "Lingnan University (LingnanU)",
+    "hkisyu.edu.hk": "Hang Seng University of Hong Kong (HKSYU)",
 }
 
-# 全部白名单域名（用于校验发现的链接是否合规）
+# All whitelisted domains (used to validate discovered links for compliance)
 ALLOWED_DOMAINS = set(UNIVERSITY_SOURCES) | set(GOV_SOURCES) | set(COMMERCIAL_BOARDS)
 
 # ---------------------------------------------------------------------------
-# 排除清单（聚合 / 抓取 / 博客站，永不采用；即便发现也只当线索回官方复核）
+# Exclusion list (aggregator / scraper / blog sites, never used; even if found,
+# they are treated only as leads and verified against the official source first)
 # ---------------------------------------------------------------------------
 EXCLUDED_DOMAINS = {
     "hiringcafe.com", "joblum.com", "careers.sh", "bebee.com", "hkese.net",
     "offertoday.com", "thebigjobsite.com", "postjobfree.com", "indeed.com",
     "linkedin.com", "gradconnection.com", "jobfinder.com", "hirelala.com",
     "sigma.ai", "imerit.com", "glassdoor.com", "ziprecruiter.com",
-    "jobstreet.com",  # 注意：ph.jobstreet.com 是菲律宾版，非香港
+    "jobstreet.com",  # note: ph.jobstreet.com is the Philippines edition, not Hong Kong
 }
 
 # ---------------------------------------------------------------------------
-# 五类岗位方向
+# Five job directions
 # ---------------------------------------------------------------------------
 CATEGORIES = {
     1: {
-        "name": "大学里的 AI / EdTech",
+        "name": "AI / EdTech in universities",
         "en": "AI/EdTech inside universities",
-        "examples": "Research Assistant、学习技术开发者、教育发展主任、多媒体开发",
+        "examples": "Research Assistant, Learning Technology Developer, "
+                    "Educational Development Officer, Multimedia Developer",
         "keywords": [
             "research assistant", "learning technology", "educational development",
             "multimedia developer", "teaching", "e-learning", "centre for learning",
         ],
     },
     2: {
-        "name": "业界人工智能与教育科技",
+        "name": "AI & EdTech industry",
         "en": "AI & EdTech industry",
-        "examples": "EdTech 公司 AI 开发、教育产品工程师",
+        "examples": "EdTech company AI developer, Education Product Engineer",
         "keywords": [
             "edtech", "education technology", "教育科技", "ai education",
             "教育", "教学", "ai 教學", "教學",
         ],
     },
     3: {
-        "name": "单纯人工智能",
+        "name": "Pure AI / ML",
         "en": "Pure AI / ML",
-        "examples": "AI/ML 工程师、数据科学培训生、算法岗",
+        "examples": "AI/ML Engineer, Data Science Trainee, Algorithm roles",
         "keywords": [
             "ai engineer", "machine learning", "data science", "graduate trainee",
             "nlp", "genai", "computer vision", "算法", "人工智能",
         ],
     },
     4: {
-        "name": "当老师 / 在学校推 AI",
+        "name": "Teaching / promoting AI in schools",
         "en": "Teaching / promoting AI in schools",
-        "examples": "AI 教学助理、STEM/IT 教师、学校 ETO、PGDE 路径",
+        "examples": "AI Teaching Assistant, STEM/IT Teacher, School ETO, PGDE pathway",
         "keywords": [
             "ai 教學助理", "stem instructor", "it teacher", "education technology officer",
             "pgde", "教学助理", "教學助理", "teacher",
         ],
     },
     5: {
-        "name": "数据分析 / 数据处理 / 数据标注",
+        "name": "Data analysis / processing / annotation",
         "en": "Data analysis / processing / annotation",
-        "examples": "数据分析师、数据处理主任、数据标注员",
+        "examples": "Data Analyst, Data Processing Officer, Data Annotator",
         "keywords": [
             "data analyst", "data processing", "data annotation", "數據標註",
             "語音轉錄標註", "data", "数据分析",
@@ -118,25 +125,27 @@ CATEGORIES = {
 }
 
 # ---------------------------------------------------------------------------
-# 多标签体系（取代固定五类分区）
-# 每个岗位按其命中的关键词动态贴标签，因此某方向「暂时没有岗位」时版面不会显得突兀。
-# 其中「方向标签」由下方关键词匹配；「角色/来源标签」（大学/业界/实习/应届友好）
-# 由 pipeline.assign_tags 依据 official_type / 标题 / 经验字段追加。
+# Multi-tag system (replaces the fixed five-category layout)
+# Each job is dynamically tagged by the keywords it matches, so a direction that
+# temporarily has no jobs does not make the layout look odd.
+# "Direction tags" are matched from the keywords below; "role / source tags"
+# (University / Industry / Intern-Trainee / Fresh-graduate friendly) are appended
+# by pipeline.assign_tags based on official_type / title / experience fields.
 # ---------------------------------------------------------------------------
 DIRECTION_TAGS = {
-    "人工智能": ["ai", "artificial intelligence", "machine learning", "ml", "nlp",
+    "Artificial Intelligence": ["ai", "artificial intelligence", "machine learning", "ml", "nlp",
                "computer vision", "genai", "deep learning", "算法", "人工智能"],
-    "教育科技": ["edtech", "education technology", "教育科技", "ai education",
+    "Educational Technology": ["edtech", "education technology", "教育科技", "ai education",
                "ai 教學", "教學科技", "e-learning"],
-    "数据分析": ["data analyst", "data science", "data processing", "data annotation",
+    "Data Analysis": ["data analyst", "data science", "data processing", "data annotation",
                "數據", "数据", "数据分析", "big data", "bigdata"],
-    "多媒体": ["multimedia", "多媒体", "frontend", "前端", "web developer"],
-    "教学": ["teacher", "teaching assistant", "教学助理", "教學助理",
+    "Multimedia": ["multimedia", "多媒体", "frontend", "前端", "web developer"],
+    "Teaching": ["teacher", "teaching assistant", "教学助理", "教學助理",
             "stem instructor", "pgde", "教育", "教学", "教學"],
 }
 
 # ---------------------------------------------------------------------------
-# 契合度加分词（BSc AI&EdTech 能力画像）
+# Fit-score bonus keywords (BSc AI&EdTech competency profile)
 # ---------------------------------------------------------------------------
 FIT_KEYWORDS = [
     "ai", "artificial intelligence", "machine learning", "ml", "nlp",
@@ -146,9 +155,10 @@ FIT_KEYWORDS = [
 ]
 
 # ---------------------------------------------------------------------------
-# 相关性闸门：命中任一关键词即视为「与 AI/EdTech/数据/教学方向相关」
-# （用于放行 IT Intern、Research Assistant、Developer 等技术/实习/研究岗，
-#   同时把 Executive Officer、Residential Officer 等通用行政岗挡在门外）
+# Relevance gate: matching any keyword marks the post as relevant to the
+# AI/EdTech/data/teaching directions. This lets through technical / internship /
+# research roles (IT Intern, Research Assistant, Developer) while blocking generic
+# administrative roles (Executive Officer, Residential Officer).
 # ---------------------------------------------------------------------------
 RELEVANCE_KEYWORDS = [
     "intern", "research assistant", "trainee", "developer", "programmer",
@@ -159,41 +169,42 @@ RELEVANCE_KEYWORDS = [
 ]
 
 # ---------------------------------------------------------------------------
-# 合规过滤：必须在标题/描述中「拒绝」的信号（需要经验/执照/硕士/已截止/非香港）
+# Compliance filter: signals that must be "rejected" in the title / description
+# (requires experience / licence / Master's / closed / non-Hong Kong)
 # ---------------------------------------------------------------------------
-# 学术 / 教职头衔（通常需博士，绝非本科应届生目标）→ 直接拒绝
+# Academic / faculty titles (usually require a PhD; not for fresh bachelor graduates)
 ACADEMIC_REJECT = [
     "professor", "lecturer", "dean", "chair professor", "postdoctoral",
     "post-doc", "postdoc", "research fellow", "head of", "principal",
 ]
-# 经验要求（本科应届生不符）
+# Experience requirements (not suitable for fresh bachelor graduates)
 EXPERIENCE_REJECT = [
     " years of experience", " yrs experience", " year experience",
     " 5 years", " 4 years", " 3 years", " 2 years", "experienced",
     "senior", "lead", "principal", "head of", "manager",
 ]
-# 学历要求（需硕士/博士/执照）
+# Academic-degree requirements (Master's / PhD / licence)
 DEGREE_REJECT = [
     "master", "m.sc", "msc", "m.phil", "phd", "doctorate", "postgraduate",
     "professional qualification", "licensed", "certified", "chartered",
     "pgde required", "master's degree required", "硕士", "博士", "执照",
 ]
-# 非香港信号
+# Non-Hong Kong signals
 NON_HK_SIGNALS = ["mainland china", "overseas", "singapore", "remote (overseas)"]
 
 # ---------------------------------------------------------------------------
-# 部署（由 GitHub Actions 自动部署 site/ 到 GitHub Pages；
-#       详见 .github/workflows/deploy.yml，无需在此配置 token）
+# Deployment (GitHub Actions deploys site/ to GitHub Pages automatically;
+# see .github/workflows/deploy.yml — no token configuration needed here)
 # ---------------------------------------------------------------------------
 PUSH_GITHUB = True
-GH_TOKEN = ""        # 不再使用：部署改由 Actions 的 GITHUB_TOKEN 完成
+GH_TOKEN = ""        # No longer used: deployment is handled by the Actions GITHUB_TOKEN
 GH_OWNER = "drhycheung"
 GH_REPO = "AIETJobs"
 
 # ---------------------------------------------------------------------------
-# 网络与限速
+# Network and rate limiting
 # ---------------------------------------------------------------------------
 REQUEST_TIMEOUT = 25
-MIN_INTERVAL = 2.0      # 单站请求最小间隔（秒）
+MIN_INTERVAL = 2.0      # Minimum interval between requests to a single site (seconds)
 MAX_INTERVAL = 5.0
 RETRIES = 2

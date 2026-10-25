@@ -1,220 +1,223 @@
-# AGENTS.md —— 香港 AI×EdTech 每日岗位推送系统（交接 / 从零重建指南）
+# AGENTS.md — Hong Kong AI × EdTech daily job-push system (handover / from-scratch rebuild guide)
 
-> 本文档是**自包含的交接说明书**。如果你是一个新接手的智能体，读完本文件即可在不依赖历史对话的前提下，从零把整套系统重建出来。
-> 当前状态：已有一个**可运行的 MVP** 与一次**创建但未验证稳定的定时任务**。用户决定**从零重做**，本文件供新智能体参考与重建（现有代码可参考，也可丢弃）。
-
----
-
-## 0. 一句话目标
-
-为**香港教育大学 BSc(AI&EdTech) 应届毕业生**做一个**每日自动**系统：抓取香港 AI / EdTech 相关岗位 → 官方链接校验 → 生成**静态网站** → 发布到 **GitHub Pages**，供学生参考。
-
-- 仓库名（已确认）：**`AIETJobs`**（PascalCase，公开仓库，用于 GitHub Pages）
-- 目标读者：仅**本科毕业应届生**，拒绝需要经验 / 执照 / 硕士的岗位
-- 发布物：GitHub 上**只放静态站点**，不存任何个人隐私数据
+> This document is a **self-contained handover specification**. If you are a newly assigned agent, reading this file alone lets you rebuild the entire system from scratch without relying on past conversations.
+> Current status: a **working MVP** exists alongside one **created-but-unverified scheduled task**. The user decided to **rebuild from scratch**; this file is for the new agent to reference and rebuild (the existing code may be reused or discarded).
 
 ---
 
-## 1. 硬性约束（必须严格遵守，不可妥协）
+## 0. One-line goal
 
-### 1.1 目标人群
-- **只收「本科可投 / Fresh graduate welcome / 经验为加分非必需」** 的岗位。
-- 程序化过滤掉：要求 X 年经验、要求专业执照、要求硕士及以上学历、已截止、链接失效、非香港、非白名单来源。
+Build a **daily automated** system for **final-year BSc(AI&EdTech) students at The Education University of Hong Kong (EdUHK)** that crawls Hong Kong AI / EdTech related jobs → verifies official links → generates a **static website** → publishes it to **GitHub Pages**, for students to reference.
 
-### 1.2 信息来源白名单（两类，其余一律排除）
-**✅ 允许：**
-| 类别 | 站点 |
+- Repository name (confirmed): **`AIETJobs`** (PascalCase, public repository, used for GitHub Pages)
+- Target readers: **bachelor final-year students only**; reject posts that require experience / a licence / a Master's degree
+- Deliverable: only a **static site** is placed on GitHub; no personal privacy data is stored
+
+---
+
+## 1. Hard constraints (must be strictly followed, non-negotiable)
+
+### 1.1 Target audience
+- Collect only posts that are **"open to bachelor graduates / fresh graduate welcome / experience is a plus, not required"**.
+- Programmatically filter out: requiring X years of experience, requiring a professional licence, requiring a Master's or higher degree, already closed, dead link, non-Hong Kong, or not from a whitelisted source.
+
+### 1.2 Information-source whitelist (two types; everything else is excluded)
+**✅ Allowed:**
+| Type | Sites |
 |---|---|
-| 香港主流求职网站 | `jobs.gov.hk`（劳工处官方）、JobsDB、CTgoodjobs、Recruit、CPjobs |
-| 香港所有大学空缺页 | HKU、CUHK、HKUST、PolyU、CityU、HKBU、Lingnan、EdUHK、HKSYU 等官方招聘系统 |
+| Major Hong Kong job boards | `jobs.gov.hk` (Labour Department official), JobsDB, CTgoodjobs, Recruit, CPjobs |
+| Vacancy pages of all Hong Kong universities | HKU, CUHK, HKUST, PolyU, CityU, HKBU, Lingnan, EdUHK, HKSYU, etc. official recruitment systems |
 
-**🚫 明确排除（聚合 / 抓取 / 博客站，永不采用）：**
+**🚫 Explicitly excluded (aggregator / scraper / blog sites, never used):**
 ```
 hiringcafe.com, joblum.com, careers.sh, bebee.com, hkese.net, offertoday.com,
 thebigjobsite.com, postjobfree.com, indeed.com, linkedin.com, gradconnection.com,
 jobfinder.com, hirelala.com, sigma.ai, imerit.com, glassdoor.com, ziprecruiter.com
 ```
-> 规则：即便在上述站点看到心仪岗位，也只当线索，回雇主官网 / 官方 ATS 复核后才收录。
+> Rule: even if you spot a desirable post on one of those sites, treat it only as a lead and include it only after verifying it against the employer's official website / official ATS.
 
-### 1.3 核心铁律：发现靠白名单，验证靠官方
-- 岗位**必须从**「香港主流求职网站」或「香港各大学空缺页」**发现**。
-- 推送给学生的**最终链接必须是公司 / 学校官方原帖**（官方招聘系统 / 官方校网），用来验证岗位是否**仍然存在**。
-- **不长期依赖会失效的求职板深链**（实测 JobsDB 链接约 30 天下架；jobs.gov.hk 详情页用会话令牌，深链易跳错 / 失效）。商业板岗位应**每日重新发现**，官方链接作校验锚点。
+### 1.3 Core iron rule: discover via the whitelist, verify via the official source
+- Jobs **must be discovered** from either the "major Hong Kong job boards" or the "vacancy pages of Hong Kong universities".
+- The **final link shown to students must be the company / university official post** (official recruitment system / official school website), used to verify that the post **still exists**.
+- **Do not rely long-term on board deep links that expire** (measured: JobsDB links go down in about 30 days; jobs.gov.hk detail pages use session tokens and deep links easily misredirect / expire). Board posts should be **re-discovered daily**, with the official link as the verification anchor.
 
-### 1.4 五类岗位方向（分类与关键词体系）
-| # | 方向 | 典型岗位 | 检索关键词（中/英，覆盖粤语写法） |
+### 1.4 Five job directions (categorisation and keyword system)
+| # | Direction | Typical posts | Search keywords (Chinese / English, covering Cantonese phrasing) |
 |---|---|---|---|
-| ① | **大学里的 AI/EdTech** | RA、学习技术开发者、教育发展主任、多媒体开发 | `Research Assistant AI education` / `Learning Technology` / `Educational Development` / `Multimedia Developer` |
-| ② | **业界人工智能与教育科技** | EdTech 公司 AI 开发、教育产品工程师 | `EdTech developer` / `AI education` / `教育科技` / `AI 教學` |
-| ③ | **单纯人工智能** | AI/ML 工程师、数据科学培训生、算法岗 | `AI Engineer` / `Machine Learning` / `Data Science Graduate Trainee` / `NLP GenAI` |
-| ④ | **当老师 / 在学校推 AI** | AI 教学助理、STEM/IT 教师、学校 ETO、**PGDE 路径** | `AI 教學助理` / `STEM Instructor` / `IT Teacher` / `Education Technology Officer` / `PGDE` |
-| ⑤ | **数据分析 / 数据处理 / 数据标注** | 数据分析师、数据处理主任、数据标注员 | `Data Analyst fresh graduate` / `Data Processing` / `Data Annotation 數據標註` / `語音轉錄標註` |
+| ① | **AI / EdTech in universities** | RA, Learning Technology Developer, Educational Development Officer, Multimedia Developer | `Research Assistant AI education` / `Learning Technology` / `Educational Development` / `Multimedia Developer` |
+| ② | **AI & EdTech industry** | EdTech company AI developer, Education Product Engineer | `EdTech developer` / `AI education` / `教育科技` / `AI 教學` |
+| ③ | **Pure AI / ML** | AI/ML Engineer, Data Science Trainee, Algorithm roles | `AI Engineer` / `Machine Learning` / `Data Science Graduate Trainee` / `NLP GenAI` |
+| ④ | **Teaching / promoting AI in schools** | AI Teaching Assistant, STEM/IT Teacher, School ETO, **PGDE pathway** | `AI 教學助理` / `STEM Instructor` / `IT Teacher` / `Education Technology Officer` / `PGDE` |
+| ⑤ | **Data analysis / processing / annotation** | Data Analyst, Data Processing Officer, Data Annotator | `Data Analyst fresh graduate` / `Data Processing` / `Data Annotation 數據標註` / `語音轉錄標註` |
 
-> 关键词同时用**中文 + 英文 + 粤语常见写法**（如「數據標註」「教學助理」「教學」），覆盖本地招聘用语。
+> Keywords use **Chinese + English + common Cantonese phrasing** (e.g. `數據標註`, `教學助理`, `教學`) to cover local recruitment language.
 
-### 1.5 契合度优先
-- 按 EdUHK BSc(AI&EdTech) 能力画像评分 **⭐（1–3 星）**：ML/NLP/CV、智能导学、学习技术、EdTech、Python、教育实习背景优先；大学 / 同领域岗优先。
-- 加分词：`ai, artificial intelligence, machine learning, nlp, computer vision, education, educational, edtech, learning, teaching, stem, python, multimedia, data, language, smart`。
-
----
-
-## 2. 合规与伦理红线（公开仓库的生死线，绝不能碰）
-
-仓库**公开**，任何做法必须「可公开辩护」：
-
-1. **绝不绕过人机验证（CAPTCHA）**：商业板只经搜索引擎公开索引「发现」并给出链接，**不写脚本撞它的验证**。
-2. **绝不规避 IP 封禁**：**不启用代理 / IP 轮换**绕封禁；靠低频 + 限速 + 可识别 UA 自然避免被拦。
-3. **遵守 `robots.txt` 与各站《服务条款》**：抓取前解析，命中禁止路径即跳过。
-4. **可识别访问身份**：固定 UA 并附联系邮箱，透明可联系。示例：
-   ```
-   EdUHK-AIEdTech-JobBot/1.0 (+https://github.com/<owner>/AIETJobs; contact: jobs-bot@example.com)
-   ```
-5. **低频、低负载**：每日一次、单站请求极少、请求间随机间隔；不给服务器造成可感知负担。
-6. **版权**：发布**仅元数据 + 链接**（岗位名 / 雇主 / 地点 / 学历 / 经验 / 截止日），**不整段复制 JD 正文**。
-7. **不采集任何个人资料**（recruiter 联系方式、申请人数据等 PDPO 意义上的个人信息），仅处理公开招聘信息。
-8. **opt-out**：README 留联系邮箱；任何站点所有者来函要求下架，立即排除该来源并删除相关数据。
-9. **质量红线**：任何「疑似失效 / 无法确认 / 命中合规禁止」的岗位，**宁可当日不推或标注 ⚠️ 待复核**，也不推死链、虚假帖或违规内容。
-
-### 公开公示的 README 合规声明（建议原文保留）
-```
-本项目是一个非商业、教育用途的公开信息聚合工具，服务于香港教育大学
-BSc(AI&EdTech) 应届毕业生。我们：
-- 仅直接抓取各大学官方招聘页与香港劳工处 jobs.gov.hk 等公开数据；
-- 商业求职板岗位经搜索引擎公开索引发现，仅提供链接，不作 bot 直爬、不绕过任何验证；
-- 每日低频访问，遵守 robots.txt，使用可识别 User-Agent 并附联系邮箱；
-- 仅发布岗位元数据与链接，不复制 JD 全文，不采集任何个人资料；
-- 尊重版权与站点意愿，收到下架请求将立即处理。
-如有疑问或下架请求，请联系：<email>
-```
+### 1.5 Fit-rating priority
+- Score by the EdUHK BSc(AI&EdTech) competency profile as **⭐ (1–3 stars)**: ML/NLP/CV, intelligent tutoring, learning technology, EdTech, Python, and education-internship background are prioritised; university / same-field posts are prioritised.
+- Bonus keywords: `ai, artificial intelligence, machine learning, nlp, computer vision, education, educational, edtech, learning, teaching, stem, python, multimedia, data, language, smart`.
 
 ---
 
-## 3. 推荐技术架构（两种调度方案，见 §6 取舍）
+## 2. Compliance and ethics red lines (the life-or-death line for a public repository, never cross)
+
+The repository is **public**, so everything must be "defensible in public":
+
+1. **Never bypass human verification (CAPTCHA)**: commercial boards are only "discovered" through public search-engine indexing and a link is provided; **never script against their verification**.
+2. **Never evade IP bans**: **do not enable proxies / IP rotation** to bypass bans; rely on low frequency + rate limiting + an identifiable UA to naturally avoid being blocked.
+3. **Comply with `robots.txt` and each site's Terms of Service**: parse before crawling; skip when a forbidden path is matched.
+4. **Identifiable access identity**: a fixed UA with a contact email, transparent and contactable. Example:
+   ```
+   EdUHK-AIEdTech-JobBot/1.0 (+https://github.com/drhycheung/AIETJobs; contact: hyincheung@eduhk.hk)
+   ```
+5. **Low frequency, low load**: once per day, very few requests per site, random intervals between requests; impose no perceptible burden on servers.
+6. **Copyright**: publish **only metadata + links** (job title / employer / location / degree / experience / deadline), **never copy the full JD body**.
+7. **Collect no personal data** (recruiter contact details, applicant data, or other PDPO-personal information); process only publicly advertised information.
+8. **Opt-out**: the README carries a contact email; if any site owner requests takedown, immediately exclude that source and delete the related data.
+9. **Quality red line**: any post that is "likely dead / unverifiable / hits a compliance prohibition" should be **withheld for the day or flagged ⚠️ pending review** rather than pushed as a dead link, fake post or violating content.
+
+### Public README compliance statement (recommended to keep verbatim)
+```
+This project is a non-commercial, education-purpose public information aggregation
+tool serving final-year BSc(AI&EdTech) students at The Education University of Hong Kong. We:
+- crawl directly only the official vacancy pages of universities and public data such as
+  the Hong Kong Labour Department's jobs.gov.hk;
+- discover commercial job-board posts through public search-engine indexing, providing
+  links only, never bot-scraping and never bypassing any verification;
+- access at low frequency, comply with robots.txt, use an identifiable User-Agent with a
+  contact email;
+- publish only job metadata and links, never the full JD text, and collect no personal data;
+- respect copyright and the wishes of each site, and honour takedown requests immediately.
+For questions or takedown requests, contact: <email>
+```
+
+---
+
+## 3. Recommended technical architecture (two scheduling options, see section 6 for trade-offs)
 
 ```
-[1 发现] 大学官方空缺页 + jobs.gov.hk：直接抓取（低频、合规）
-         商业求职板：经搜索引擎索引「发现」→ 帖子 URL（不直爬、不绕验证）
+[1 Discovery] University official vacancy pages + jobs.gov.hk: direct crawl (low-frequency, compliant)
+          Commercial job boards: discovered through search-engine indexing -> post URL (no direct scrape, no verification bypass)
    ↓
-[2 解析] 提取字段（标题/雇主/地点/学历/经验/AI属性/发布日/截止日/原始链接）
+[2 Parsing] Extract fields (title / employer / location / degree / experience / AI attributes / posted date / deadline / original link)
    ↓
-[3 官方校验] 每雇主去官网 / 官方 ATS 找官方原帖 → 确认岗位是否仍存在
-           找不到 → 官网主页 + 官方邮箱，标注「无自托管原帖」
+[3 Official verification] For each employer, find the official post on the official website / official ATS -> confirm the post still exists
+            Not found -> official homepage + official email, labelled "no self-hosted official post"
    ↓
-[4 合规过滤] 剔除：需经验/执照/硕士、已截止、链接失效、非香港、非白名单、robots 禁止、个人资料类
+[4 Compliance filter] Remove: requires experience / licence / Master's, already closed, dead link, non-Hong Kong, non-whitelist, robots forbidden, personal-data type
    ↓
-[5 排序] 按契合度评 ⭐，大学 / 同领域岗优先；去重
+[5 Sorting] Star rating by fit, university / same-field posts first; deduplicate
    ↓
-[6 生成] Markdown（源）+ HTML（GitHub Pages 模板，仅元数据 + 链接）
+[6 Generation] Markdown (source) + HTML (GitHub Pages template, metadata + links only)
    ↓
-[7 发布] 推送 GitHub Pages（gh-pages 分支）
+[7 Publishing] Push to GitHub Pages (gh-pages branch)
    ↓
-[8 日志] 记录失效链接、当日新剔除项、校验失败项 → 复盘调优
+[8 Logging] Record dead links, items newly removed today, verification failures -> retrospective tuning
 ```
 
-**技术选型建议**
-- 语言：**Python 3.11**
-- 官方页抓取：`requests`（**强制 IPv4**，见 §5 坑）+ `BeautifulSoup`
-- JS 渲染兜底：Playwright **仅用于「渲染官方页」**，**绝不用于绕过 CAPTCHA**
-- 搜索发现：搜索 API（Google Programmable Search 免费额度 / Bing / SerpAPI）或免费搜索引擎 HTML（见坑：沙箱内搜索引擎直连常超时）
-- 合规：`urllib.robotparser` 解析 robots + 可识别 UA + 单站限速
-- 存储：`jobs.json`（当日）+ `archive/`（历史归档，便于趋势与去重）
-- 模板：Jinja2 渲染 HTML
-- 发布：git push → `gh-pages` → GitHub Pages
+**Technology selection advice**
+- Language: **Python 3.11**
+- Official-page crawling: `requests` (**force IPv4**, see section 5 pitfalls) + `BeautifulSoup`
+- JS-render fallback: Playwright **only for "rendering official pages"**, **never for bypassing CAPTCHA**
+- Search discovery: a search API (Google Programmable Search free quota / Bing / SerpAPI) or free search-engine HTML (pitfall: search-engine direct connections inside the sandbox often time out)
+- Compliance: `urllib.robotparser` to parse robots + identifiable UA + per-site rate limiting
+- Storage: `jobs.json` (current day) + `archive/` (historical archive, for trend and dedupe)
+- Template: Jinja2 to render HTML
+- Publishing: git push -> `gh-pages` -> GitHub Pages
 
-**数据模型（每条岗位字段）**
+**Data model (fields per job)**
 ```
-title, employer, category(①–⑤), category_name, location,
-degree, experience, ai_edtech_fit(⭐×1-3), fit_reason,
+title, employer, category (①–⑤), category_name, location,
+degree, experience, ai_edtech_fit (⭐×1-3), fit_reason,
 discover_source, official_link, official_type,
-posted_date, deadline, verified_date, status(active|expired|unknown), notes
+posted_date, deadline, verified_date, status (active|expired|unknown), notes
 ```
-> 以 **JSON** 为中间存储，再渲染 Markdown 与 HTML。**发布内容仅含上表元数据与链接，不嵌入 JD 全文。**
+> Use **JSON** as intermediate storage, then render Markdown and HTML. **Published content contains only the metadata and links in the table above; the full JD is not embedded.**
 
 ---
 
-## 4. 现有 MVP（参考实现，可保留或丢弃）
+## 4. Existing MVP (reference implementation; keep or discard)
 
-沙箱内已有一个能跑通的实现，文件位于 `/workspace`：
+A working implementation exists inside the sandbox, files under `/workspace`:
 
 ```
 scraper/
-  config.py        # 白名单、排除域、大学官方页、五类关键词、UA、PUSH_GITHUB 开关
-  fetch.py         # fetch_url(强制IPv4+代理兜底) / search_discover(搜索发现，仅留商业板链接)
-  pipeline.py      # run(queries, seeds) → 去重 + 评分 + 过滤
-  live.py          # collect() 真实抓取大学官方页（PolyU/HKBU/CUHK/HKUST/EdUHK）
-  verify.py        # is_live(url) 存活检查
-  generate.py      # 生成 site/index.html + data/jobs.json + data/daily-report.md
-  deploy.py        # push() 受 PUSH_GITHUB + GH_TOKEN 网关（审查期不触发）
-  run.py           # 入口：pipeline.run → generate → 视开关 deploy
-  seeds.json       # 6 条预核实真实岗位（兜底）
-site/index.html    # 生成的静态站
-data/jobs.json     # 当日数据
-README.md          # 合规声明 + 部署指南
-design-methodology-architecture.md  # 方法论与架构（V2 合规版，必读）
-verification-report.md              # 调度可执行 + 真实数据可取的验证记录
+  config.py        # whitelist, excluded domains, university official pages, five-direction keywords, UA, PUSH_GITHUB switch
+  fetch.py         # fetch_url (force IPv4 + proxy fallback) / search_discover (search discovery, board links only)
+  pipeline.py      # run(queries, seeds) -> dedupe + scoring + filter
+  live.py          # collect() actually crawls university official pages (PolyU/HKBU/CUHK/HKUST/EdUHK)
+  verify.py        # is_live(url) liveness check
+  generate.py      # generate site/index.html + data/jobs.json + data/daily-report.md
+  deploy.py        # push() gated by PUSH_GITHUB + GH_TOKEN (not triggered during review period)
+  run.py           # entry: pipeline.run -> generate -> deploy per switch
+  seeds.json       # 6 pre-verified real jobs (fallback)
+site/index.html    # generated static site
+data/jobs.json     # current-day data
+README.md          # compliance statement + deployment guide
+design-methodology-architecture.md  # methodology and architecture (V2 compliant edition, must-read)
+verification-report.md              # verification record that scheduling is executable + real data is obtainable
 ```
 
-> MVP 实测：手动运行 `python3.11 run.py` 可生成 7 条岗位（其中 4 条来自真实大学官方空缺页），并在「审查期」正确停在**不推送 GitHub**。
+> MVP measured: manually running `python3.11 run.py` generates 7 jobs (4 of them from real university official vacancy pages), and correctly stops at "do not push to GitHub" during the review period.
 
 ---
 
-## 5. 踩坑清单 / 经验教训（重建时务必避免）
+## 5. Pitfall list / lessons learned (avoid these when rebuilding)
 
-1. **聚合站 / 错链**：BYTEWISE 的 jobs.gov.hk 令牌链跳到了按摩广告；HKUST Interfolio 链接已失效；`ph.jobstreet.com` 是菲律宾版（非香港）——**最终链接一律换成雇主 / 学校的官方原帖**。
-2. **沙箱 Python 直连**：Python 能直连 `jobs.gov.hk`、`cuhk.taleo.net`、`polyu`、`hkust`（200），但**大学站点 IPv6 直连易失败 → 强制 IPv4**（`requests` 适配器 `family=socket.AF_INET`，或 `curl -4`）。
-3. **搜索发现超时**：DuckDuckGo / Bing HTML 在沙箱内经常 3+ 分钟挂起 → 用**短超时 + 快速失败**，绝不重试拖垮每日任务。
-4. **live_collect 返回 0**：网络抖动 + 异常被吞掉导致静默失败 → 加日志、显式异常、重试退避。
-5. **坏标题**：JS 渲染页抓到 "Description" / "Breadcrumb" 等导航文本 → 加 `_JOB_WORDS` 关键词过滤；JS 页回退到**预核实的 TARGET 标题**。
-6. **GitHub 鉴权**：沙箱内对 github.com 的 **POST 超时**（GET 可用），device-code OAuth 不可用 → GitHub 写操作交由**云端运行时 / 用户提供的 PAT（repo 权限）** 处理，不要在沙箱内硬跑 OAuth。
-7. **JobsDB 30 天失效**：求职板深链不能长期存，必须**每日重新发现**，官方链接作锚点。
-8. **部分中小企 EdTech 无自托管原帖**（如 eClass、Popular e-Learning、BYTEWISE）：官网只有品牌页 → 只能给「官网主页 + 官方邮箱」并**如实标注**。
-9. **质量优先于覆盖率**：放弃直爬 / 绕验证后，商业板覆盖率低于全量直爬——这是合规换来的取舍，可接受（大学页与 jobs.gov.hk 仍稳定直抓兜底）。
-
----
-
-## 6. 调度方案取舍（本次重建的关键决策点）
-
-原方法论推荐 **GitHub Actions**（每日 cron 触发脚本 + 部署 gh-pages），理由是沙箱 / 本地无法「永远在线」，而 Actions 提供免费稳定的每日算力。
-
-> ⚠️ **本次遗留问题（需新智能体决策）**：曾用 **WorkBuddy 云端定时任务**（任务 ID `13622729`，Cron `0 0 8 * * *` Asia/Shanghai，每天 08:00 HKT，审查期不推送 GitHub）做了一次创建，但用户反馈「那边好像有问题」。该任务可能不稳定或未经验证。
-> **建议**：新智能体优先评估回到 **GitHub Actions** 原生调度（更可控、与 GitHub Pages 同源、无需额外 PAT 注入到第三方调度器），或在确认 WorkBuddy 调度确实可用后再用。无论哪种，**审查期都先不推送 GitHub，让用户观察几天再开 `PUSH_GITHUB=1`**。
-
-### 部署到 GitHub 的步骤（待用户提供 PAT 后执行）
-1. 创建公开仓库 **`AIETJobs`**（用户习惯：每字大写开头，无连字符）。
-2. 配置部署凭证：`GH_TOKEN`（repo 权限）、`GH_OWNER`（用户名）、`PUSH_GITHUB=1`。
-3. 推送静态站到 `gh-pages`（或 main + Pages 指向 `/site` / `docs`），启用 GitHub Pages。
-4. 在 README 公示合规声明（见 §2）。
+1. **Aggregator sites / wrong links**: BYTEWISE's jobs.gov.hk token link jumped to a massage advert; HKUST Interfolio link was dead; `ph.jobstreet.com` is the Philippines edition (not Hong Kong) — **always replace the final link with the employer / university official post**.
+2. **Sandbox Python direct connection**: Python can directly reach `jobs.gov.hk`, `cuhk.taleo.net`, `polyu`, `hkust` (200), but **university sites' IPv6 direct connections often fail -> force IPv4** (`requests` adapter `family=socket.AF_INET`, or `curl -4`).
+3. **Search-discovery timeouts**: DuckDuckGo / Bing HTML inside the sandbox often hang for 3+ minutes -> use **short timeouts + fail fast**, never retry to the point of dragging down the daily task.
+4. **live_collect returns 0**: network jitter + swallowed exceptions caused silent failure -> add logging, explicit exceptions, retry with backoff.
+5. **Bad titles**: JS-rendered pages captured navigation text like "Description" / "Breadcrumb" -> add a `_JOB_WORDS` keyword filter; JS pages fall back to the **pre-verified TARGET title**.
+6. **GitHub authentication**: POST to github.com inside the sandbox **times out** (GET works), device-code OAuth is unavailable -> GitHub write operations are handed to the **cloud runtime / a user-provided PAT (repo scope)**; do not force OAuth inside the sandbox.
+7. **JobsDB 30-day expiry**: board deep links cannot be stored long-term; they must be **re-discovered daily**, with the official link as the anchor.
+8. **Some small/medium EdTech firms have no self-hosted official post** (e.g. eClass, Popular e-Learning, BYTEWISE): the official site only has a brand page -> provide only "official homepage + official email" and **label it honestly**.
+9. **Quality over coverage**: after giving up direct scraping / verification bypass, commercial-board coverage is lower than full direct scraping — this is the trade-off bought by compliance and is acceptable (university pages and jobs.gov.hk remain stable direct-crawl fallbacks).
 
 ---
 
-## 7. 待完成清单（交给下一位智能体）
+## 6. Scheduling trade-offs (the key decision point for this rebuild)
 
-- [ ] 决策调度方案：GitHub Actions（推荐）还是修复 WorkBuddy 定时任务。
-- [ ] 重建 / 完善抓取器（大学适配器 9+ 校 + jobs.gov.hk，合规直抓）。
-- [ ] 重建搜索发现模块（调用搜索 API 搜商业板帖 URL，不直爬、不绕验证）。
-- [ ] 官方链接解析与存活检查（404 / Expired 检测）。
-- [ ] 合规过滤 + ⭐ 评分 + 排序 + 去重。
-- [ ] GitHub Pages 模板（五类分区、⭐、双链接、防骗与合规板块）。
-- [ ] `.github/workflows/daily.yml`（若选 Actions）：每日 cron 发现 + 校验 + 部署。
-- [ ] 端到端跑通一次，输出当天报告，确认官方页抓取 / 搜索发现 / 校验可行。
-- [ ] **审查期**：先不推送，让用户观察几天；确认无误后再建仓库 + 开推送。
-- [ ] 提供「部署到你自己的 GitHub 仓库」操作说明 + README 合规声明模板。
+The original methodology recommended **GitHub Actions** (daily cron triggers the script + deploys gh-pages), on the grounds that the sandbox / local machine cannot be "always on", while Actions provides free, stable daily compute.
 
-### 防骗保障（写入页面固定板块）
-- 红旗：先交费 / 押金、索身份证或银行资料、私人邮箱联系、薪酬明显偏离市场。
-- 二次核查：香港网络安全防骗视伏器 https://cyberdefender.hk/scameter/
-- 页面明示白名单、排除清单与合规声明，接受监督。
+> ⚠️ **Legacy issue from this round (to be decided by the new agent)**: a **WorkBuddy cloud scheduled task** was created once (task ID `13622729`, Cron `0 0 8 * * *` Asia/Shanghai, 08:00 HKT daily, no GitHub push during the review period), but the user reported "something seems wrong there". That task may be unstable or unverified.
+> **Recommendation**: the new agent should first evaluate returning to **GitHub Actions** native scheduling (more controllable, co-located with GitHub Pages, no extra PAT injection into a third-party scheduler), or use WorkBuddy scheduling only after confirming it actually works. Either way, **during the review period do not push to GitHub; let the user observe for a few days before setting `PUSH_GITHUB=1`**.
+
+### Steps to deploy to GitHub (execute after the user provides a PAT)
+1. Create the public repository **`AIETJobs`** (user habit: capitalise the first letter of each word, no hyphen).
+2. Configure deployment credentials: `GH_TOKEN` (repo scope), `GH_OWNER` (username), `PUSH_GITHUB=1`.
+3. Push the static site to `gh-pages` (or `main` with Pages pointing to `/site` / `docs`), and enable GitHub Pages.
+4. Publish the compliance statement in the README (see section 2).
 
 ---
 
-## 8. 已知待确认 / 占位项
+## 7. To-do list (hand to the next agent)
 
-| 项 | 当前值 | 说明 |
+- [ ] Decide on scheduling: GitHub Actions (recommended) or fix the WorkBuddy scheduled task.
+- [ ] Rebuild / complete the crawler (9+ university adapters + jobs.gov.hk, compliant direct crawl).
+- [ ] Rebuild the search-discovery module (call a search API to find commercial-board post URLs, no direct scrape, no verification bypass).
+- [ ] Official-link parsing and liveness check (404 / Expired detection).
+- [ ] Compliance filter + ⭐ scoring + sorting + deduplication.
+- [ ] GitHub Pages template (five-direction sections, ⭐, dual links, anti-scam and compliance sections).
+- [ ] `.github/workflows/daily.yml` (if Actions is chosen): daily cron discovery + verification + deployment.
+- [ ] Run end-to-end once, output the day's report, confirm official-page crawl / search discovery / verification are feasible.
+- [ ] **Review period**: do not push first; let the user observe for a few days; only create the repository + enable push after confirmation.
+- [ ] Provide "deploy to your own GitHub repository" instructions + a README compliance-statement template.
+
+### Anti-scam safeguards (written into a fixed page section)
+- Red flags: upfront fee / deposit, requesting ID or bank details, personal-email contact, salary clearly off market.
+- Cross-check: Hong Kong Scameter anti-scam search https://cyberdefender.hk/scameter/
+- The page explicitly shows the whitelist, exclusion list and compliance statement, inviting oversight.
+
+---
+
+## 8. Known to-be-confirmed / placeholder items
+
+| Item | Current value | Note |
 |---|---|---|
-| 联系邮箱 | `jobs-bot@example.com` | **占位**，部署前替换为真实可联系邮箱 |
-| 仓库 URL | `https://github.com/example/AIETJobs` | **占位**，替换为真实 owner |
-| `GH_OWNER` | 空 | 建好仓库后填入，或用环境变量注入 |
-| `GH_TOKEN` | 不进仓库 | 仅部署阶段配置（repo 权限） |
-| `PUSH_GITHUB` | 默认 `0`（关） | 审查期关闭；确认后设 `1` |
+| Contact email | `hyincheung@eduhk.hk` (Dr. HY Cheung) | configured in `scraper/config.py` (`CONTACT_EMAIL`) and shown in the README and on the site |
+| Repository URL | `https://github.com/drhycheung/AIETJobs` | public repository, live at https://drhycheung.github.io/AIETJobs/ |
+| `GH_OWNER` | `drhycheung` | repository owner |
+| `GH_TOKEN` | not in repository | deployment uses the Actions built-in `GITHUB_TOKEN` (repo scope not needed) |
+| `PUSH_GITHUB` | `True` | review period over; the site is deployed automatically by `.github/workflows/deploy.yml` on every push to `main` |
 
-> ⚠️ 任何含密钥（GH_TOKEN）的配置都**不得进入公开仓库**，只能通过环境变量 / Secrets 注入。
+> ⚠️ Any configuration containing secrets (`GH_TOKEN`) **must not enter the public repository**; inject it only via environment variables / Secrets.

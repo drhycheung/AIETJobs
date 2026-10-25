@@ -1,16 +1,20 @@
 """
-search_discovery.py — 商业求职板「发现」模块（合规：仅取链接，不直爬、不绕验证）
+search_discovery.py — Discovery module for commercial job boards (compliant: links only,
+no direct scraping, no bypass of verification)
 
-合规设计（AGENTS.md §1.3 / §2）：
-- 香港主流求职网站（JobsDB / CTgoodjobs / Recruit / CPjobs）经**搜索引擎公开索引**
-  发现帖子 URL，绝不写脚本直爬求职板、绝不绕过任何人机验证。
-- 发现的链接仅作「求职板原帖」线索，最终收录前必须 is_live 存活校验；
-  商业板深链有效期短（约 30 天），故每日重新发现，并如实标注来源。
+Compliance design (see AGENTS.md sections 1.3 / 2):
+- Major Hong Kong job boards (JobsDB / CTgoodjobs / Recruit / CPjobs) are discovered
+  through public search-engine indexing; we never script-scrape the boards and never
+  bypass any human-verification challenge.
+- Discovered links serve only as "job-board post" leads and must pass is_live before
+  inclusion; because board deep links are short-lived (about 30 days), they are
+  re-discovered daily and the source is labelled honestly.
 
-两种发现后端：
-1. 配置了搜索 API（Google Programmable Search / Bing / SerpAPI）→ 自动检索五类关键词。
-2. 未配置 API → 读取 data/discovered.json（由智能体经 WebSearch 发现的真实帖子，
-   人工落地为本文件，绝不编造）。两种情况下都不会产出伪造数据。
+Two discovery backends:
+1. A search API configured (Google Programmable Search / Bing / SerpAPI) -> automatically
+   searches the five-direction keywords.
+2. No API configured -> read data/discovered.json (real posts found by the agent via
+   WebSearch, recorded manually here, never fabricated). In neither case is fake data produced.
 """
 from __future__ import annotations
 
@@ -26,13 +30,14 @@ import config
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DISCOVERED_PATH = os.path.join(ROOT, "data", "discovered.json")
 
-# 搜索 API 配置（环境变量或 config 中填写）；未配置则回退到本地 leads 文件
+# Search API configuration (env vars or config); falls back to the local leads file if unset
 SEARCH_API = os.environ.get("AIET_SEARCH_API", "")
 SEARCH_API_KEY = os.environ.get("AIET_SEARCH_KEY", "")
 
 
 def discover_queries() -> list[str]:
-    """生成五类方向的检索式（中/英/粤语常见写法）。"""
+    """Generate search queries for the five directions (common Chinese / English /
+    Cantonese phrasings)."""
     return [
         "AI graduate trainee Hong Kong",
         "machine learning data analyst fresh graduate Hong Kong",
@@ -47,12 +52,13 @@ def discover_queries() -> list[str]:
 
 
 # ---------------------------------------------------------------------------
-# 候选帖子 → 统一岗位字典
+# Candidate post -> unified job dictionary
 # ---------------------------------------------------------------------------
 def convert_lead_to_job(lead: dict) -> dict:
-    """将一条发现的候选帖子（来自搜索 API 或本地 leads）转为统一岗位字典。"""
+    """Convert one discovered candidate post (from a search API or local leads) into
+    the unified job dictionary."""
     domain = (urllib.parse.urlparse(lead.get("official_link", "")).netloc or "").lower()
-    board_name = "商业求职板"
+    board_name = "Commercial job board"
     for d, name in config.COMMERCIAL_BOARDS.items():
         if d in domain:
             board_name = name
@@ -67,7 +73,7 @@ def convert_lead_to_job(lead: dict) -> dict:
         "description": lead.get("description", "") or "",
         "posted_date": lead.get("posted_date"),
         "deadline": lead.get("deadline"),
-        "discover_source": f"{board_name}（求职板发现）",
+        "discover_source": f"{board_name} (job-board discovery)",
         "official_link": lead.get("official_link", ""),
         "official_type": "commercial_board",
         "status": "active",
@@ -75,7 +81,8 @@ def convert_lead_to_job(lead: dict) -> dict:
 
 
 # ---------------------------------------------------------------------------
-# 本地 leads（未配置搜索 API 时使用，由智能体经 WebSearch 落地真实帖子）
+# Local leads (used when no search API is configured; real posts recorded by the
+# agent via WebSearch)
 # ---------------------------------------------------------------------------
 def load_local_leads() -> list[dict]:
     if not os.path.exists(DISCOVERED_PATH):
@@ -84,22 +91,24 @@ def load_local_leads() -> list[dict]:
         with open(DISCOVERED_PATH, encoding="utf-8") as f:
             data = json.load(f)
         leads = data if isinstance(data, list) else data.get("leads", [])
-        # 仅保留白名单内、未被排除域的链接
+        # Keep only links that are whitelisted and not in an excluded domain
         kept = [l for l in leads if whitelisted(l.get("official_link", ""))
                 and not excluded(l.get("official_link", ""))]
-        print(f"[discovery] 读取本地 leads {len(kept)}/{len(leads)} 条（已过滤非白名单/排除域）")
+        print(f"[discovery] read local leads {len(kept)}/{len(leads)} (filtered non-whitelist / excluded domains)")
         return kept
     except Exception as e:
-        print(f"[discovery] 读取 {DISCOVERED_PATH} 失败：{e}")
+        print(f"[discovery] failed to read {DISCOVERED_PATH}: {e}")
         return []
 
 
 # ---------------------------------------------------------------------------
-# 搜索 API 后端（配置后启用；保持低频、可识别 UA、遵守 ToS）
+# Search API backend (enabled once configured; keep low-frequency, identifiable UA,
+# and comply with Terms of Service)
 # ---------------------------------------------------------------------------
 def _search_via_api() -> list[dict]:
-    """调用配置的搜索 API，返回候选帖子列表（含 title/employer/official_link）。"""
-    import fetch  # 复用强制 IPv4 + 可识别 UA
+    """Call the configured search API and return a list of candidate posts
+    (with title / employer / official_link)."""
+    import fetch  # reuse forced IPv4 + identifiable UA
     leads: list[dict] = []
     if SEARCH_API == "bing":
         # Bing Web Search v7
@@ -146,34 +155,35 @@ def _search_via_api() -> list[dict]:
                     "official_link": link,
                 })
             fetch.polite_sleep()
-    # google / 其他：在此扩展（保持合规）。未实现则回退本地 leads。
+    # google / others: extend here (stay compliant). Falls back to local leads if unimplemented.
     return leads
 
 
 # ---------------------------------------------------------------------------
-# 主入口：返回候选帖子（经白名单/排除域过滤）
+# Main entry: return candidate posts (filtered by whitelist / excluded domains)
 # ---------------------------------------------------------------------------
 def discover() -> list[dict]:
     if SEARCH_API and SEARCH_API_KEY:
         leads = _search_via_api()
         if leads:
             return leads
-        print("[discovery] 搜索 API 无结果，回退本地 leads")
+        print("[discovery] search API returned no results; falling back to local leads")
     return load_local_leads()
 
 
 def collect_leads_as_jobs() -> list[dict]:
-    """发现候选帖子并转为岗位字典（未配置 API 且本地无 leads 时返回空，不编造）。"""
+    """Discover candidate posts and convert to job dictionaries (returns empty, no
+    fabrication, when no API is configured and no local leads exist)."""
     if not config.COMMERCIAL_DISCOVERY_ENABLED:
         return []
     leads = discover()
     jobs = [convert_lead_to_job(l) for l in leads if l.get("official_link")]
-    print(f"[discovery] 商业求职板发现 {len(jobs)} 条候选（{', '.join(config.COMMERCIAL_BOARDS.values())}）")
+    print(f"[discovery] commercial job boards discovered {len(jobs)} candidates ({', '.join(config.COMMERCIAL_BOARDS.values())})")
     return jobs
 
 
 # ---------------------------------------------------------------------------
-# 链接白名单 / 排除域校验
+# Link whitelist / excluded-domain checks
 # ---------------------------------------------------------------------------
 def whitelisted(url: str) -> bool:
     host = (urllib.parse.urlparse(url).netloc or "").lower()

@@ -1,7 +1,8 @@
 """
-live.py — 白名单官方页直抓适配器
-当前完整实现：香港教育大学 EdUHK（current-openings，官方 PDF 原帖）
-其他大学：框架占位，待各自 ATS 接入后启用（保持空白而非编造数据）。
+live.py — Adapters that directly crawl whitelisted official pages
+Currently fully implemented: EdUHK (current-openings, official PDF posts).
+Other universities: framework placeholders, enabled once each ATS is connected
+(kept empty rather than fabricating data).
 """
 from __future__ import annotations
 
@@ -20,10 +21,10 @@ import search_discovery
 
 
 # ---------------------------------------------------------------------------
-# EdUHK 适配器
+# EdUHK adapter
 # ---------------------------------------------------------------------------
 class _EduhkParser(HTMLParser):
-    """解析 EdUHK current-openings 页：每个 .job__item 为一个岗位。"""
+    """Parse the EdUHK current-openings page: each .job__item is one job."""
 
     def __init__(self):
         super().__init__()
@@ -117,14 +118,15 @@ class _EduhkParser(HTMLParser):
 
 
 def collect_eduhk() -> list[dict]:
-    """抓取并解析 EdUHK 当前空缺页（含分页），返回岗位字典列表（未经合规过滤）。"""
+    """Crawl and parse the EdUHK current-openings page (with pagination) and return
+    a list of job dictionaries (not yet compliance-filtered)."""
     base = "https://eduhk.hk/en/current-openings"
     if not fetch.robots_allowed(base):
-        print(f"[eduhk] robots.txt 禁止访问 {base}，跳过")
+        print(f"[eduhk] robots.txt disallows {base}; skipped")
         return []
     jobs: list[dict] = []
     seen_links = set()
-    for page in range(1, 8):  # 最多 7 页，超出即停止
+    for page in range(1, 8):  # up to 7 pages, stop beyond that
         url = base if page == 1 else f"{base}/page{page}"
         status, content = fetch.fetch_url(url)
         if status != 200 or not content or 'class="job__item"' not in content:
@@ -144,7 +146,7 @@ def collect_eduhk() -> list[dict]:
         if len(page_jobs) < 10:
             break
         fetch.polite_sleep()
-    # 转换为统一岗位字典
+    # Convert to the unified job dictionary
     out = []
     for j in jobs:
         href = j["href"]
@@ -164,25 +166,27 @@ def collect_eduhk() -> list[dict]:
             "official_type": "employer_official",
             "status": "active",
         })
-    print(f"[eduhk] 解析到 {len(out)} 个岗位（含分页去重）")
+    print(f"[eduhk] parsed {len(out)} jobs (with pagination dedupe)")
     return out
 
 
 # ---------------------------------------------------------------------------
-# 其他大学框架（占位：返回空，避免编造；接入后按 EdUHK 模式扩展）
+# Framework for other universities (placeholder: returns empty to avoid fabricating;
+# extend following the EdUHK pattern once connected)
 # ---------------------------------------------------------------------------
 def collect_university(domain: str) -> list[dict]:
-    """通用占位：当前未实现对应 ATS 解析，返回空列表。"""
-    print(f"[live] {domain} 适配器尚未启用（框架占位，未编造数据）")
+    """Generic placeholder: the corresponding ATS parsing is not implemented yet."""
+    print(f"[live] {domain} adapter not yet enabled (framework placeholder, no fabricated data)")
     return []
 
 
 def collect_all() -> list[dict]:
-    """汇总所有已启用的来源：大学官方页 + 商业求职板（经搜索发现）。"""
+    """Aggregate all enabled sources: university official pages + commercial job
+    boards (via search discovery)."""
     jobs = collect_eduhk()
-    # 商业求职板：经搜索引擎发现链接（不直爬、不绕验证）
+    # Commercial job boards: links discovered via search engines (no direct scrape, no verification bypass)
     jobs += search_discovery.collect_leads_as_jobs()
-    # 其他大学待接入：HKUST / CUHK / HKU / PolyU / CityU / HKBU / Lingnan / HKSYU
+    # Other universities to be connected: HKUST / CUHK / HKU / PolyU / CityU / HKBU / Lingnan / HKSYU
     return jobs
 
 

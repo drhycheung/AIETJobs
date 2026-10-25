@@ -5,13 +5,13 @@ on:
     branches: [main]
   workflow_dispatch:
 
-# 允许 GITHUB_TOKEN 部署到 Pages
+# Allow the GITHUB_TOKEN to deploy to Pages
 permissions:
   contents: read
   pages: write
   id-token: write
 
-# 同一时间只跑一个部署
+# Run only one deployment at a time
 concurrency:
   group: pages
   cancel-in-progress: false
@@ -32,8 +32,8 @@ jobs:
       - name: Upload site artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          # 学生页与数据同目录 site/，直接部署该目录
-          path: site
+        # The student page and its data live together in site/; deploy that directory directly
+        path: site
 
       - name: Deploy to GitHub Pages
         id: deployment

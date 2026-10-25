@@ -6,10 +6,16 @@
     "location": "Hong Kong",
     "degree": "Bachelor (IT / Computer Science or related)",
     "experience": "Work experience not required",
-    "description": "FDM 的毕业生培训计划：零经验亦可，提供 Java 等技术认证与在岗训练，派驻合作企业担任开发岗。",
+    "description": "FDM graduate training programme: no prior experience required; provides Java and other technical certifications and on-the-job training, with placements at partner companies as developers.",
     "posted_date": "2026-01-21",
     "deadline": null,
-    "official_link": "http://recruit.com.hk/jobseeker/JobDetail.aspx?jobOrder=L060421659"
+    "official_link": "http://recruit.com.hk/jobseeker/JobDetail.aspx?jobOrder=L060421659",
+    "category_name": null,
+    "fit_reason": null,
+    "compliance_note": null,
+    "excluded_reason": null,
+    "notes": null,
+    "discover_source": null
   },
   {
     "title": "Analyst Programmer",
@@ -18,10 +24,16 @@
     "location": "Hong Kong",
     "degree": "Bachelor (IT or related fields)",
     "experience": "Entry-level welcome (AI / Big Data / IoT exposure)",
-    "description": "协助机构开发及维护资讯系统；欢迎具 AI / 大数据 / 物联网背景的应届生，入职由资深同事带教。",
+    "description": "Assist the organisation in developing and maintaining information systems; fresh graduates with a background in AI / Big Data / IoT are welcome, with on-boarding mentoring by experienced colleagues.",
     "posted_date": null,
     "deadline": null,
-    "official_link": "http://recruit.com.hk/jobseeker/JobDetail.aspx?jobOrder=L059335869"
+    "official_link": "http://recruit.com.hk/jobseeker/JobDetail.aspx?jobOrder=L059335869",
+    "category_name": null,
+    "fit_reason": null,
+    "compliance_note": null,
+    "excluded_reason": null,
+    "notes": null,
+    "discover_source": null
   },
   {
     "title": "Project Consultant Trainee (Web Solution)",
@@ -30,9 +42,15 @@
     "location": "Hong Kong",
     "degree": "Degree in Business, IT, or related",
     "experience": "Fresh graduates welcome",
-    "description": "Web 方案方向培训生：参与客户需求分析、网站/系统方案设计与落地，无需经验，提供在职培训。",
+    "description": "Web solutions trainee: participates in client needs analysis, and the design and implementation of website / system solutions; no experience required, with on-the-job training provided.",
     "posted_date": null,
     "deadline": null,
-    "official_link": "http://recruit.com.hk/job-detail/togo-pacific-limited/project-consultant-trainee-web-solution/L0601125520"
+    "official_link": "http://recruit.com.hk/job-detail/togo-pacific-limited/project-consultant-trainee-web-solution/L0601125520",
+    "category_name": null,
+    "fit_reason": null,
+    "compliance_note": null,
+    "excluded_reason": null,
+    "notes": null,
+    "discover_source": null
   }
 ]

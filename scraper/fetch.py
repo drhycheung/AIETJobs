@@ -1,10 +1,10 @@
 """
-fetch.py — 合规的网络访问层
-- 强制 IPv4（避免沙箱 IPv6 直连失败）
-- 可识别 UA + 联系邮箱
-- robots.txt 解析（命中禁止路径即跳过）
-- is_live(url)：官方链接存活检查
-- 处理 EdUHK 等旧服务器的 legacy renegotiation SSL 问题
+fetch.py — Compliant network access layer
+- Force IPv4 (avoids sandbox IPv6 direct-connection failures)
+- Identifiable UA + contact email
+- robots.txt parsing (skip when a forbidden path is matched)
+- is_live(url): official link liveness check
+- Handles legacy renegotiation SSL issues on legacy servers such as EdUHK
 """
 from __future__ import annotations
 
@@ -25,12 +25,13 @@ from urllib.robotparser import RobotFileParser
 import config
 
 _ssl_ctx = ssl.create_default_context()
-_ssl_ctx.options |= 0x4  # OP_LEGACY_SERVER_CONNECT：兼容 EdUHK 等旧服务器
+_ssl_ctx.options |= 0x4  # OP_LEGACY_SERVER_CONNECT: compatible with legacy servers such as EdUHK
 _ssl_ctx.set_ciphers("DEFAULT@SECLEVEL=1")
 
 
 class IPv4HTTPSHandler(urllib.request.HTTPSHandler):
-    """强制 IPv4 连接、并携带兼容旧服务器 SSL 上下文的 HTTPS handler。"""
+    """HTTPS handler that forces IPv4 connections and carries an SSL context
+    compatible with legacy servers."""
 
     def __init__(self, *args, **kwargs):
         kwargs["context"] = _ssl_ctx
@@ -57,7 +58,7 @@ def _headers():
 
 
 def fetch_url(url: str, timeout: int | None = None, binary: bool = False):
-    """合规抓取：返回 (status, content)。失败时 status 为 None。"""
+    """Compliant fetch: returns (status, content). On failure, status is None."""
     timeout = timeout or config.REQUEST_TIMEOUT
     req = urllib.request.Request(url, headers=_headers())
     try:
@@ -68,12 +69,13 @@ def fetch_url(url: str, timeout: int | None = None, binary: bool = False):
             return r.status, data
     except urllib.error.HTTPError as e:
         return e.code, None
-    except Exception as e:  # 网络/DNS/SSL 等
+    except Exception as e:  # network / DNS / SSL etc.
         return None, f"{type(e).__name__}: {e}"
 
 
 def robots_allowed(url: str) -> bool:
-    """检查 robots.txt 是否允许本 UA 访问该路径。无法获取时默认允许（透明 UA）。"""
+    """Check whether robots.txt allows this UA to access the path.
+    Defaults to allowed when robots.txt cannot be fetched (transparent UA)."""
     try:
         parsed = urllib.parse.urlparse(url)
         robots_url = f"{parsed.scheme}://{parsed.netloc}/robots.txt"
@@ -87,8 +89,8 @@ def robots_allowed(url: str) -> bool:
 
 def is_live(url: str) -> tuple[bool, str]:
     """
-    官方链接存活检查。返回 (是否存活, 说明)。
-    用 HEAD/GET 探测，2xx 视为存活；4xx/5xx/超时视为失效。
+    Official link liveness check. Returns (is_alive, explanation).
+    Probes with HEAD/GET; 2xx counts as alive; 4xx/5xx/timeout counts as dead.
     """
     req = urllib.request.Request(url, headers=_headers(), method="HEAD")
     try:
@@ -96,7 +98,7 @@ def is_live(url: str) -> tuple[bool, str]:
             if 200 <= r.status < 400:
                 return True, f"HTTP {r.status}"
     except urllib.error.HTTPError as e:
-        # 部分服务器不支持 HEAD，回退 GET 取前若干字节
+        # Some servers do not support HEAD; fall back to GET and read the first bytes
         if e.code in (403, 405, 501):
             try:
                 req2 = urllib.request.Request(url, headers=_headers())
@@ -113,7 +115,7 @@ def is_live(url: str) -> tuple[bool, str]:
 
 
 def polite_sleep():
-    """单站请求间随机间隔，降低服务器负载。"""
+    """Random interval between requests to a single site, to reduce server load."""
     time.sleep(random.uniform(config.MIN_INTERVAL, config.MAX_INTERVAL))
 
 
