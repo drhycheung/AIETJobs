@@ -3,6 +3,18 @@
   "note": "Leads found by the Tavily search API. Each entry records the day it was first and last seen; rejected results are not stored.",
   "leads": [
     {
+      "title": "香港金融管理局 - 金管局見習經濟師計劃",
+      "employer": "",
+      "official_link": "https://www.hkma.gov.hk/chi/about-us/join-us/opportunities-for-students-and-graduates-to-join-the-hkma/graduate-economist-programme",
+      "kind": "careers_page",
+      "discover_source": "Tavily search",
+      "query": "香港 數據分析 見習生 招聘 應屆畢業生",
+      "classify_note": "employer recruitment page",
+      "snippet": "金管局資訊中心\n\n展覽館圖書館紀念品\n\n加入我們\n\n為何選擇金管局我們的工作職位空缺學生和畢業生加入金管局的機會\n\n招標公告\n\n關連機構及相關網站\n\n金管局的關連機構及連結香港特區政府及有關機構中央銀行多邊組織其他\n\n Eng 简\n 字體大小 A A A\n 打印\n 聯絡我們\n FacebookInstagramLinkedinXiaoHungShuWechatXYoutube\n\n主頁 / 關於我們 / 加入我們 / 學生和畢業生加入金管局的機會 / 金管局見習經濟師計劃\n\n# 金管局見習經濟師計劃\n\n金管局提供為期兩年的見習經濟師計劃，旨在培育對經濟研究有興趣的年青人，讓他們發揮所長，為金管局提供重要的經濟和金融市場分析，有助其履行在維持貨幣及金融體系穩定方面的工作。\n\n在兩年期內，見習經濟師會在兩至三個不同部門工作，負責經濟研究或宏觀金融狀況監察。\n\n表現理想的見習經濟師在完成計劃後會獲",
+      "first_seen": "2026-10-28",
+      "last_seen": "2026-10-28"
+    },
+    {
       "title": "香港金融管理局 - 學生和畢業生加入金管局的機會",
       "employer": "",
       "official_link": "https://www.hkma.gov.hk/chi/about-us/join-us/opportunities-for-students-and-graduates-to-join-the-hkma",
@@ -32,9 +44,9 @@
       "official_link": "https://www.edcosys.com/careers",
       "kind": "careers_page",
       "discover_source": "Tavily search",
-      "query": "香港 人工智能 教育 公司 招聘 應屆畢業生",
+      "query": "香港 教育科技 公司 招聘 人工智能 工程師",
       "classify_note": "employer recruitment page",
-      "snippet": "Edcosys 是一間香港 AI 教育公司，教學生與企業團隊以自然語言（Vibe Coding）指揮 AI，建立真正能用的工具。我們現正擴充教學與開發團隊，招聘對 AI 教育有熱誠、能實際交付成果的導師與開發者。Edcosys is a Hong Kong AI education company that teaches students and business teams to direct AI in plain language, building real, working tools. We are growing our teaching and engineering teams and hiring instructors and developers who are genuinely passionate about AI education and can del",
+      "snippet": "申請此職位Apply for this role\n\n開發Engineering\n\n### AI 課程開發工程師AI Curriculum Engineer\n\n全職：香港中環／科學園Full-time: Central / Science Park\n\n開發課程工具、自動化內部工作流程，並建立用於教學的示範應用（App、聊天機械人、數字人），讓教學內容可重複、可示範。Build course tooling, automate internal workflows, and create teaching demo apps (apps, chatbots, digital humans) that make the curriculum repeatable and demonstrable.\n\n#### 要求Requirements [...] Edcosys 是一間香港 AI 教育公司，",
       "first_seen": "2026-10-28",
       "last_seen": "2026-10-28"
     },
@@ -87,14 +99,26 @@
       "last_seen": "2026-10-28"
     },
     {
+      "title": "Data Engineering Graduate Programme  in Hong Kong - FDM Group",
+      "employer": "",
+      "official_link": "https://careers.fdmgroup.com/vacancies/2541/data-engineering-graduate-programme.html",
+      "kind": "job_post",
+      "discover_source": "Tavily search",
+      "query": "Hong Kong EdTech company careers AI engineer graduate",
+      "classify_note": "individual vacancy on the employer's own site",
+      "snippet": "### Log in to your account\n\n### Log in to your account\n\n# Data Engineering Graduate Programme\n\n## About The Role\n\nShape the Future of Data and AI with Us. [...] The age of data-driven transformation and AI-powered solutions is here, and we are at the forefront of this revolution. At FDM, we collaborate with forward-thinking clients on cutting-edge projects that harness the potential of data and ar",
+      "first_seen": "2026-10-28",
+      "last_seen": "2026-10-28"
+    },
+    {
       "title": "Software Engineering Graduate Programme │ International students│Hong Kong based  in Hong Kong - FDM Group",
       "employer": "",
       "official_link": "https://careers.fdmgroup.com/vacancies/1721/software-engineering-graduate-programme--international-students-hong-kong-based.html",
       "kind": "job_post",
       "discover_source": "Tavily search",
-      "query": "Hong Kong EdTech company careers AI engineer graduate",
+      "query": "Hong Kong education technology developer vacancy apply graduate",
       "classify_note": "individual vacancy on the employer's own site",
-      "snippet": "Share\n\n## Other jobs like this\n\n### AI Engineer\n\n### Technical Skills Lab Coach\n\n### Graduate Tech Accelerator Programme – Software, Data & Engineering Roles\n\n###### Get in touch\n\n###### Social\n\n###### Insights\n\n###### Company\n\n###### Policies\n\nStock photo [...] 🌍 19 centres across APAC, North America, Europe & the UK   \n🚀 25,000+ careers launched   \n🤝 300+ industry-leading client partners \n\nWe ar",
+      "snippet": "🌍 19 centres across APAC, North America, Europe & the UK   \n🚀 25,000+ careers launched   \n🤝 300+ industry-leading client partners \n\nWe are proud to be an Equal Opportunity Employer and part of the FTSE4Good Index. With over 80 nationalities represented globally, diversity and inclusion remain at the core of who we are. \n\nReady tobuild your future in Hong Kong?\n\nIf you’re preparing to return home a",
       "first_seen": "2026-10-28",
       "last_seen": "2026-10-28"
     },
