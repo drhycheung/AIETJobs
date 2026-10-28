@@ -13,6 +13,8 @@ Compliance principles (see AGENTS.md section 2):
 - Only metadata + links are published; no full job-description text; no personal data.
 """
 
+import os
+
 # ---------------------------------------------------------------------------
 # Identifiable User-Agent (transparent and contactable)
 # ---------------------------------------------------------------------------
@@ -86,6 +88,15 @@ EMPLOYER_DOMAINS = {
 TAVILY_ENDPOINT = "https://api.tavily.com/search"
 TAVILY_MAX_RESULTS = 12
 TAVILY_DAILY_QUERY_LIMIT = 18   # ~540 searches per month, leaving half the allowance spare
+
+# ---------------------------------------------------------------------------
+# Optional OpenRouter free-tier model for the lightweight "fit note" enrichment
+# (one short sentence per job explaining its fit for a BSc AI&EdTech graduate).
+# The free tier requires a real ":free" model id — there is no "openrouter/free"
+# model on OpenRouter. Override with the OPENROUTER_MODEL environment variable
+# if you prefer a different free model.
+# ---------------------------------------------------------------------------
+OPENROUTER_MODEL = os.environ.get("OPENROUTER_MODEL", "google/gemma-4-26b-a4b-it:free")
 
 # Queries are written in the language recruiters actually use, so that both
 # Chinese-language and English-language recruitment pages are found.
@@ -282,6 +293,9 @@ NEGATIVE_TITLE_KEYWORDS = [
     "executive assistant", "residential", "warden", "secretary",
     # Out-of-scope fields for an AI x EdTech board
     "economist", "經濟師",
+    # Out-of-scope employers: a pure finance / banking regulator is not AI&EdTech,
+    # so the Hong Kong Monetary Authority (HKMA) posts are excluded by name.
+    "hkma", "金管局", "金融管理局",
 ]
 
 # ---------------------------------------------------------------------------

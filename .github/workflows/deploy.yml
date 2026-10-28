@@ -50,8 +50,9 @@ jobs:
           # never written into the repository.
           TAVILY_API_KEY: ${{ secrets.TAVILY_API_KEY }}
           # Optional: free-tier OpenRouter key used only for the lightweight
-          # "fit note" enrichment (model openrouter/free). Left unset is fine;
-          # the pipeline degrades gracefully when it is not provided.
+          # "fit note" enrichment. It uses a real ":free" model (default
+          # google/gemma-4-26b-a4b-it:free; there is no "openrouter/free" model).
+          # Left unset is fine; the pipeline degrades gracefully when not provided.
           OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
         run: python scraper/run.py
 

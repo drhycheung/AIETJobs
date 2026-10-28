@@ -14,6 +14,7 @@ import re
 import io
 import datetime
 import urllib.parse
+import time
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
@@ -385,6 +386,59 @@ def openrouter_judge_summary(text: str, title: str = "", max_tokens: int = 60) -
         return "", ""
 
 
+def openrouter_fit_note(title: str, text: str, max_tokens: int = 40) -> str:
+    """Call OpenRouter (free model) for a one-sentence fit note explaining why the
+    role is or is not a good fit for a fresh BSc AI&EdTech graduate. Returns '' on
+    any failure. A single, tiny call keeps free-tier quota usage low."""
+    key = os.environ.get("OPENROUTER_API_KEY")
+    if not key or not text:
+        return ""
+    prompt = (
+        "You are a concise careers adviser. In ONE short sentence (<=25 words), explain "
+        "why the following role is or is not a good fit for a fresh bachelor graduate in "
+        "BSc Artificial Intelligence and Educational Technology. Be honest: if it is a "
+        "weak fit, say so briefly. No markdown, no surrounding quotes.\n\n"
+        f"Job title: {title}\n\nDescription:\n{text}"
+    )
+    url = "https://openrouter.ai/api/v1/chat/completions"
+    headers = {"Authorization": f"Bearer {key}", "Content-Type": "application/json"}
+    payload = {"model": config.OPENROUTER_MODEL,
+               "messages": [{"role": "user", "content": prompt}],
+               "max_tokens": max_tokens}
+    # Free-tier models are served from a shared upstream pool that is occasionally
+    # rate-limited (HTTP 429). Retry a few times with backoff; give up on other
+    # errors so a flaky model never breaks the nightly run.
+    for attempt in range(3):
+        try:
+            r = requests.post(url, headers=headers, json=payload, timeout=20)
+        except Exception:
+            return ""
+        if r.status_code == 200:
+            try:
+                j = r.json()
+                return j.get("choices", [])[0].get("message", {}).get("content", "").strip().strip('"')
+            except Exception:
+                return ""
+        if r.status_code in (429, 500, 502, 503, 504):
+            time.sleep(2 + attempt * 3)
+            continue
+        return ""
+    return ""
+
+
+def _load_prev_fit_notes() -> dict:
+    """Reuse fit notes from the previously generated site/jobs.json so the nightly
+    run only calls OpenRouter for genuinely new jobs (conserves free-tier quota)."""
+    import json as _json
+    try:
+        p = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
+                         "site", "jobs.json")
+        d = _json.load(open(p, encoding="utf-8"))
+        return {j.get("title"): j.get("fit_note") for j in d.get("jobs", []) if j.get("fit_note")}
+    except Exception:
+        return {}
+
+
 # ---------------------------------------------------------------------------
 # Main pipeline
 # ---------------------------------------------------------------------------
@@ -395,6 +449,8 @@ def _dedupe_key(job: dict) -> str:
 def run() -> list[dict]:
     raw = collect_all()
     print(f"[pipeline] raw jobs: {len(raw)}")
+    # Reuse fit notes from the last run so only new jobs hit the free-tier API.
+    prev_notes = _load_prev_fit_notes()
 
     seen = {}
     for job in raw:
@@ -450,6 +506,13 @@ def run() -> list[dict]:
         # Tags (for the student page)
         job["tags"] = assign_tags(job)
         verify(job)
+        # Lightweight enrichment: a one-sentence "why it fits you" note. Reused from
+        # the previous run when available, otherwise generated via OpenRouter (free).
+        if job.get("status") == "active":
+            job["fit_note"] = (
+                prev_notes.get(job.get("title"))
+                or openrouter_fit_note(job.get("title", ""), job.get("description") or jd_text)
+            )
         k = _dedupe_key(job)
         if k in seen:
             continue

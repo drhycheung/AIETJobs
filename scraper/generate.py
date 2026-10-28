@@ -44,6 +44,7 @@ def build_records(jobs: list[dict]) -> list[dict]:
             "experience": j.get("experience"),
             "ai_edtech_fit": j.get("ai_edtech_fit"),
             "fit_reason": j.get("fit_reason"),
+            "fit_note": j.get("fit_note") or "",
             "tags": j.get("tags") or [],
             "description": j.get("description") or "",
             "discover_source": j.get("discover_source"),
@@ -150,6 +151,7 @@ def render_html(jobs: list[dict]) -> str:
   .tags {{ display:flex; gap:6px; flex-wrap:wrap; margin:8px 0; }}
   .tag {{ background:#e8f1fb; color:var(--brand2); border:1px solid #cfe2fb; border-radius:6px; padding:2px 8px; font-size:.75rem; }}
   .desc {{ font-size:.85rem; color:var(--ink); background:#f8fafc; border-left:3px solid var(--brand); padding:6px 10px; border-radius:0 8px 8px 0; margin:8px 0; }}
+  .note {{ font-size:.8rem; color:var(--muted); background:#fff8ec; border-left:3px solid var(--warn); padding:6px 10px; border-radius:0 8px 8px 0; margin:8px 0; }}
   .links {{ display:flex; gap:8px; flex-wrap:wrap; margin-top:6px; }}
   .btn {{ text-decoration:none; font-size:.85rem; padding:7px 12px; border-radius:8px; }}
   .btn.primary {{ background:var(--brand); color:#fff; }}
@@ -217,13 +219,14 @@ function cardHTML(j){{
   const gHref=isOff?'https://eduhk.hk/en/current-openings':boardHome(j.official_link);
   const src='<span class="src">'+esc(j.discover_source||'')+'</span>';
   const desc=j.description?'<p class="desc">'+esc(j.description)+'</p>':'';
+  const note=j.fit_note?'<p class="note">💡 '+esc(j.fit_note)+'</p>':'';
   const dl=isPage?'See the page for current openings':(j.deadline||'N/A (ongoing recruitment)');
   const dept=j.department?'<span>📂 '+esc(j.department)+'</span>':'';
   const ghost=isPage?'':'<a class="btn ghost" href="'+esc(gHref)+'" target="_blank" rel="noopener">'+gLabel+'</a>';
   return '<article class="card" data-tags="'+((j.tags||[]).map(esc).join(' '))+'">'
     +'<div class="card-head"><h3>'+esc(j.title)+'</h3><span class="fit" title="Fit rating">'+stars(j.ai_edtech_fit)+'</span></div>'
     +'<div class="meta"><span>🏛️ '+esc(j.employer)+'</span>'+dept+'<span>📍 '+esc(j.location||'')+'</span><span>⏰ Deadline: '+esc(dl)+'</span>'+src+'</div>'
-    +'<div class="tags">'+tags+'</div>'+desc
+    +'<div class="tags">'+tags+'</div>'+desc+note
     +'<div class="links"><a class="btn primary" href="'+esc(j.official_link)+'" target="_blank" rel="noopener">'+pLabel+'</a>'
     +ghost+'</div>'
     +'</article>';

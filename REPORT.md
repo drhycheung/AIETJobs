@@ -4,8 +4,8 @@
 
 - Target audience: EdUHK BSc(AI&EdTech) fresh graduates
 - Raw crawled: 83 posts
-- **Shown on student page (active): 25 posts**
-- Auto-filtered / pending review: 58 posts
+- **Shown on student page (active): 23 posts**
+- Auto-filtered / pending review: 60 posts
 
 ## ✅ Jobs shown to students today
 
@@ -28,16 +28,14 @@
 - ⭐3 **Software Engineering Graduate Programme │ International students│Hong Kong based  in Hong Kong - FDM Group** — careers.fdmgroup.com · tags: Industry, Intern / Trainee, Fresh-graduate friendly · Deadline N/A · [Tavily search](https://careers.fdmgroup.com/vacancies/1721/software-engineering-graduate-programme--international-students-hong-kong-based.html)
 - ⭐2 **Research Assistant I/II (Part-time)** — The Education University of Hong Kong (EdUHK) · Department of Social Sciences and Policy Studies · tags: University, Intern / Trainee, Fresh-graduate friendly · Deadline 06 Nov 2026 · [EdUHK official vacancies](https://eduhk.hk/cms/f/career/35073/RAI_RAII_SSPS_2600932.pdf)
 - ⭐2 **Teaching Assistant** — The Education University of Hong Kong (EdUHK) · Department of Curriculum and Instruction · tags: Teaching, University, Fresh-graduate friendly · Deadline 29 Oct 2026 · [EdUHK official vacancies](https://eduhk.hk/cms/f/career/35022/TAsst_C%26I_2600918.pdf)
-- ⭐2 **香港金融管理局 - 金管局見習經理計劃** — www.hkma.gov.hk · tags: Industry, Fresh-graduate friendly · Deadline N/A · [Tavily search](https://www.hkma.gov.hk/chi/about-us/join-us/opportunities-for-students-and-graduates-to-join-the-hkma/manager-trainee-programme)
 - ⭐2 **CityUHK e-Recruitment System** — jobs1.cityu.edu.hk · tags: University, Fresh-graduate friendly · Deadline N/A · [Tavily search](https://jobs1.cityu.edu.hk/apply/Default.aspx?jobtype=RS)
-- ⭐2 **香港金融管理局 - 學生和畢業生加入金管局的機會** — www.hkma.gov.hk · tags: Industry, Fresh-graduate friendly · Deadline N/A · [Tavily search](https://www.hkma.gov.hk/chi/about-us/join-us/opportunities-for-students-and-graduates-to-join-the-hkma)
 - ⭐1 **Jobs | Robot Institute of HK** — www.robot.edu.hk · tags: University, Fresh-graduate friendly · Deadline N/A · [Tavily search](https://www.robot.edu.hk/jobs)
 - ⭐1 **Job Openings | Hong Kong International School** — www.hkis.edu.hk · tags: University, Intern / Trainee, Fresh-graduate friendly · Deadline N/A · [Tavily search](https://www.hkis.edu.hk/careers/job-openings)
 - ⭐1 **2027 Digital & IT Graduate Trainee Programme (HK & GBA)** — careers.cathaypacific.com · tags: Artificial Intelligence, Industry, Intern / Trainee, Fresh-graduate friendly · Deadline N/A · [Tavily search](https://careers.cathaypacific.com/en/careers/jobs/hong-kong/2027-digital-it-graduate-trainee-programme-hk-gba-32408)
 
 ## 🚫 Auto-filter reason breakdown (not shown to students; maintainers only)
 
-- 14 posts: Negative title keyword
+- 16 posts: Negative title keyword
 - 8 posts: Academic/faculty post (usually requires a PhD): 'professor'
 - 4 posts: Title signals seniority / experience: 'manager'
 - 4 posts: No keyword match with the AI/EdTech/data/teaching directions

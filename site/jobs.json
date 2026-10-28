@@ -1,7 +1,7 @@
 {
   "generated_at": "2026-10-29",
   "target_audience": "EdUHK BSc(AI&EdTech) fresh graduates",
-  "total_listed": 25,
+  "total_listed": 23,
   "jobs": [
     {
       "title": "Research Assistant II",
@@ -13,7 +13,8 @@
       "degree": "Bachelor (fresh graduate welcome)",
       "experience": "Not specified / entry-level",
       "ai_edtech_fit": 3,
-      "fit_reason": "Category = AI / EdTech in universities; matched: llm, data, learning, education, teaching, research",
+      "fit_reason": "Category = AI / EdTech in universities; matched: llm, data, education, learning, teaching, research",
+      "fit_note": "",
       "tags": [
         "University",
         "Fresh-graduate friendly"
@@ -40,7 +41,8 @@
       "degree": "Bachelor (fresh graduate welcome)",
       "experience": "Not specified / entry-level",
       "ai_edtech_fit": 3,
-      "fit_reason": "Category = AI / EdTech in universities; matched: generative, ai, learning, education, research",
+      "fit_reason": "Category = AI / EdTech in universities; matched: generative, ai, education, learning, research",
+      "fit_note": "",
       "tags": [
         "University",
         "Fresh-graduate friendly"
@@ -67,7 +69,8 @@
       "degree": "Bachelor (fresh graduate welcome)",
       "experience": "Not specified / entry-level",
       "ai_edtech_fit": 3,
-      "fit_reason": "Category = AI & EdTech industry; matched: ai, developer, multimedia, learning, education",
+      "fit_reason": "Category = AI & EdTech industry; matched: ai, developer, multimedia, education, learning",
+      "fit_note": "",
       "tags": [
         "Multimedia",
         "University",
@@ -95,7 +98,8 @@
       "degree": "Bachelor (fresh graduate welcome)",
       "experience": "Not specified / entry-level",
       "ai_edtech_fit": 3,
-      "fit_reason": "Category = Pure AI / ML; matched: 人工智慧, ai, stem, 課程, 工程, 程式",
+      "fit_reason": "Category = Pure AI / ML; matched: 人工智慧, ai, stem, 程式, 課程, 工程",
+      "fit_note": "",
       "tags": [
         "Artificial Intelligence",
         "Industry",
@@ -123,7 +127,8 @@
       "degree": "Bachelor (fresh graduate welcome)",
       "experience": "Not specified / entry-level",
       "ai_edtech_fit": 3,
-      "fit_reason": "Category = AI & EdTech industry; matched: ai education, ai, engineer, engineering, 開發, 雲",
+      "fit_reason": "Category = AI & EdTech industry; matched: ai education, ai, engineer, engineering, 雲, 開發",
+      "fit_note": "",
       "tags": [
         "Artificial Intelligence",
         "Teaching",
@@ -153,6 +158,7 @@
       "experience": "Not specified / entry-level",
       "ai_edtech_fit": 3,
       "fit_reason": "Category = AI & EdTech industry; matched: 資訊科技, 課程, 科技, 教育",
+      "fit_note": "",
       "tags": [
         "Teaching",
         "Industry",
@@ -180,7 +186,8 @@
       "degree": "Bachelor (fresh graduate welcome)",
       "experience": "Not specified / entry-level",
       "ai_edtech_fit": 3,
-      "fit_reason": "Category = AI & EdTech industry; matched: 數據, 課程, 科技, 工程, 數碼, 教育",
+      "fit_reason": "Category = AI & EdTech industry; matched: 數碼, 課程, 科技, 數據, 工程, 教育",
+      "fit_note": "",
       "tags": [
         "Industry",
         "Fresh-graduate friendly"
@@ -208,6 +215,7 @@
       "experience": "Not specified / entry-level",
       "ai_edtech_fit": 3,
       "fit_reason": "Category = Pure AI / ML; matched: ai, engineer, engineering, programme, intern",
+      "fit_note": "",
       "tags": [
         "University",
         "Fresh-graduate friendly"
@@ -234,7 +242,8 @@
       "degree": "Bachelor (fresh graduate welcome)",
       "experience": "Not specified / entry-level",
       "ai_edtech_fit": 3,
-      "fit_reason": "Category = AI & EdTech industry; matched: ai, engineer, engineering, programme, data",
+      "fit_reason": "Category = AI & EdTech industry; matched: ai, engineer, engineering, data, programme",
+      "fit_note": "",
       "tags": [
         "Industry",
         "Fresh-graduate friendly"
@@ -262,6 +271,7 @@
       "experience": "Not specified / entry-level",
       "ai_edtech_fit": 3,
       "fit_reason": "Category = Pure AI / ML; matched: ai, engineer, programme",
+      "fit_note": "",
       "tags": [
         "Industry",
         "Fresh-graduate friendly"
@@ -288,7 +298,8 @@
       "degree": "Bachelor (fresh graduate welcome)",
       "experience": "Not specified / entry-level",
       "ai_edtech_fit": 3,
-      "fit_reason": "Category = Pure AI / ML; matched: 資訊科技, 科技, 數碼, 培訓生",
+      "fit_reason": "Category = Pure AI / ML; matched: 數碼, 資訊科技, 科技, 培訓生",
+      "fit_note": "",
       "tags": [
         "Industry",
         "Fresh-graduate friendly"
@@ -315,7 +326,8 @@
       "degree": "Bachelor (fresh graduate welcome)",
       "experience": "Not specified / entry-level",
       "ai_edtech_fit": 3,
-      "fit_reason": "Category = AI & EdTech industry; matched: 資訊科技, 數據, 科技, 數碼, 培訓生",
+      "fit_reason": "Category = AI & EdTech industry; matched: 數碼, 資訊科技, 科技, 數據, 培訓生",
+      "fit_note": "",
       "tags": [
         "Industry",
         "Fresh-graduate friendly"
@@ -343,6 +355,7 @@
       "experience": "Not specified / entry-level",
       "ai_edtech_fit": 3,
       "fit_reason": "Category = AI & EdTech industry; matched: engineer, engineering, programme, trainee",
+      "fit_note": "",
       "tags": [
         "Artificial Intelligence",
         "Industry",
@@ -372,6 +385,7 @@
       "experience": "Not specified / entry-level",
       "ai_edtech_fit": 3,
       "fit_reason": "Category = AI & EdTech industry; matched: ai 教學, ai, stem, 教育, 教學",
+      "fit_note": "",
       "tags": [
         "Artificial Intelligence",
         "Educational Technology",
@@ -401,7 +415,8 @@
       "degree": "Bachelor (fresh graduate welcome)",
       "experience": "Not specified / entry-level",
       "ai_edtech_fit": 3,
-      "fit_reason": "Category = AI & EdTech industry; matched: stem, engineer, engineering, developer, data",
+      "fit_reason": "Category = AI & EdTech industry; matched: engineer, stem, engineering, developer, data",
+      "fit_note": "",
       "tags": [
         "Artificial Intelligence",
         "Industry",
@@ -430,6 +445,7 @@
       "experience": "Not specified / entry-level",
       "ai_edtech_fit": 3,
       "fit_reason": "Category = AI & EdTech industry; matched: engineer, engineering, programme, software",
+      "fit_note": "",
       "tags": [
         "Industry",
         "Fresh-graduate friendly"
@@ -457,6 +473,7 @@
       "experience": "Not specified / entry-level",
       "ai_edtech_fit": 3,
       "fit_reason": "Category = AI & EdTech industry; matched: engineer, engineering, programme, software, intern",
+      "fit_note": "",
       "tags": [
         "Industry",
         "Intern / Trainee",
@@ -485,6 +502,7 @@
       "experience": "Not specified / entry-level",
       "ai_edtech_fit": 2,
       "fit_reason": "Category = AI / EdTech in universities; matched: data, education, research",
+      "fit_note": "",
       "tags": [
         "University",
         "Intern / Trainee",
@@ -512,7 +530,8 @@
       "degree": "Bachelor (fresh graduate welcome)",
       "experience": "Not specified / entry-level",
       "ai_edtech_fit": 2,
-      "fit_reason": "Category = AI / EdTech in universities; matched: curriculum, learning, education, teaching",
+      "fit_reason": "Category = AI / EdTech in universities; matched: curriculum, education, learning, teaching",
+      "fit_note": "",
       "tags": [
         "Teaching",
         "University",
@@ -531,33 +550,6 @@
       "notes": "Link verified: HTTP 200"
     },
     {
-      "title": "香港金融管理局 - 金管局見習經理計劃",
-      "employer": "www.hkma.gov.hk",
-      "department": "",
-      "category": 3,
-      "category_name": "Pure AI / ML",
-      "location": "Hong Kong",
-      "degree": "Bachelor (fresh graduate welcome)",
-      "experience": "Not specified / entry-level",
-      "ai_edtech_fit": 2,
-      "fit_reason": "Category = Pure AI / ML; matched: ml, 見習",
-      "tags": [
-        "Industry",
-        "Fresh-graduate friendly"
-      ],
-      "description": "金管局資訊中心\n\n展覽館圖書館紀念品\n\n加入我們\n\n為何選擇金管局我們的工作職位空缺學生和畢業生加入金管局的機會\n\n招標公告\n\n關連機構及相關網站\n\n金管局的關連機構及連結香港特區政府及有關機構中央銀行多邊組織其他\n\n Eng 简\n 字體大小 A A A\n 打印\n 聯絡我們\n FacebookInstagramLinkedinXiaoHungShuWechatXYoutube\n\n主頁 / 關於我們 / 加入我們 / 學生和畢業生加入金管局的機會 / 金管局見習經理計劃\n\n# 金管局見習經理計劃\n\n金管局提供為期兩年的見習經理計劃，旨在培育有志投身中央銀行工作的年青人，成為未來的管理骨幹，為香港的金融穩定和繁榮作出貢獻。\n\n見習經理會獲安排在兩至三個不同部門工作，接受在職培訓，以了解金管局在維持貨幣和金融體系穩定的職能。\n\n表現理想的見習經理在完成計劃後會獲聘為經理。\n\n你準備好了嗎？\n\n加",
-      "discover_source": "Tavily search",
-      "official_link": "https://www.hkma.gov.hk/chi/about-us/join-us/opportunities-for-students-and-graduates-to-join-the-hkma/manager-trainee-programme",
-      "official_type": "employer_careers_page",
-      "posted_date": null,
-      "deadline": null,
-      "verified_date": "2026-10-29",
-      "status": "active",
-      "compliance_note": "Employer recruitment page; requirements are stated on the page and change as individual posts open and close",
-      "excluded_reason": null,
-      "notes": "Link verified: HTTP 200"
-    },
-    {
       "title": "CityUHK e-Recruitment System",
       "employer": "jobs1.cityu.edu.hk",
       "department": "",
@@ -568,6 +560,7 @@
       "experience": "Not specified / entry-level",
       "ai_edtech_fit": 2,
       "fit_reason": "Category = AI & EdTech industry; matched: ai, stem, research",
+      "fit_note": "",
       "tags": [
         "University",
         "Fresh-graduate friendly"
@@ -575,33 +568,6 @@
       "description": "| Postdoctoral Fellow | Department of Neuroscience | Applications will be considered until the position(s) is/are filled |  |\n| Research Assistant | Department of Social and Behavioural Sciences | Applications will be considered until the position(s) is/are filled |  |\n| Postdoctoral Fellow/Research Assistant | Hong Kong Institute of AI for Science | Applications will be considered until the posit",
       "discover_source": "Tavily search",
       "official_link": "https://jobs1.cityu.edu.hk/apply/Default.aspx?jobtype=RS",
-      "official_type": "employer_careers_page",
-      "posted_date": null,
-      "deadline": null,
-      "verified_date": "2026-10-29",
-      "status": "active",
-      "compliance_note": "Employer recruitment page; requirements are stated on the page and change as individual posts open and close",
-      "excluded_reason": null,
-      "notes": "Link verified: HTTP 200"
-    },
-    {
-      "title": "香港金融管理局 - 學生和畢業生加入金管局的機會",
-      "employer": "www.hkma.gov.hk",
-      "department": "",
-      "category": 3,
-      "category_name": "Pure AI / ML",
-      "location": "Hong Kong",
-      "degree": "Bachelor (fresh graduate welcome)",
-      "experience": "Not specified / entry-level",
-      "ai_edtech_fit": 2,
-      "fit_reason": "Category = Pure AI / ML; matched: ml, 見習, 研究",
-      "tags": [
-        "Industry",
-        "Fresh-graduate friendly"
-      ],
-      "description": "金管局資訊中心\n\n展覽館圖書館紀念品\n\n加入我們\n\n為何選擇金管局我們的工作職位空缺學生和畢業生加入金管局的機會\n\n招標公告\n\n關連機構及相關網站\n\n金管局的關連機構及連結香港特區政府及有關機構中央銀行多邊組織其他\n\n Eng 简\n 字體大小 A A A\n 打印\n 聯絡我們\n FacebookInstagramLinkedinXiaoHungShuWechatXYoutube\n\n主頁 / 關於我們 / 加入我們 / 學生和畢業生加入金管局的機會\n\n# 學生和畢業生加入金管局的機會\n\n 金管局見習經理計劃\n\n  金管局提供為期兩年的見習經理計劃，旨在培育有志投身中央銀行工作的年青人，成為未來的管理骨幹，為香港的金融穩定和繁榮出力。\n\n  了解更多\n 金管局見習經濟師計劃\n\n  金管局提供為期兩年的見習經濟師計劃，旨在培育對經濟研究有興趣的年青人，讓他們發揮所長，為金管局提供重要的經濟和金融市",
-      "discover_source": "Tavily search",
-      "official_link": "https://www.hkma.gov.hk/chi/about-us/join-us/opportunities-for-students-and-graduates-to-join-the-hkma",
       "official_type": "employer_careers_page",
       "posted_date": null,
       "deadline": null,
@@ -622,6 +588,7 @@
       "experience": "Not specified / entry-level",
       "ai_edtech_fit": 1,
       "fit_reason": "Category = AI & EdTech industry; matched: education, teaching",
+      "fit_note": "",
       "tags": [
         "University",
         "Fresh-graduate friendly"
@@ -649,6 +616,7 @@
       "experience": "Not specified / entry-level",
       "ai_edtech_fit": 1,
       "fit_reason": "Category = Pure AI / ML; matched: web, intern",
+      "fit_note": "",
       "tags": [
         "University",
         "Intern / Trainee",
@@ -677,6 +645,7 @@
       "experience": "Not specified / entry-level",
       "ai_edtech_fit": 1,
       "fit_reason": "Category = AI & EdTech industry; matched: programme, trainee",
+      "fit_note": "",
       "tags": [
         "Artificial Intelligence",
         "Industry",
