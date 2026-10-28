@@ -37,9 +37,18 @@ jobs:
         with:
           python-version: '3.11'
 
+      - name: Install PDF reader
+        # Required for the compliance check that reads the official job-description
+        # PDF; without it that check silently degrades to no check at all.
+        run: python -m pip install --quiet pypdf
+
       - name: Refresh job data
         # If crawling fails, still deploy the last committed site
         continue-on-error: true
+        env:
+          # Search API used for discovery; the key is a repository secret and is
+          # never written into the repository.
+          TAVILY_API_KEY: ${{ secrets.TAVILY_API_KEY }}
         run: python scraper/run.py
 
       - name: Commit refreshed data

@@ -43,6 +43,64 @@ GOV_SOURCES = {
     "jobs.gov.hk": "Hong Kong Labour Department jobs.gov.hk",
 }
 
+# ---------------------------------------------------------------------------
+# Third discovery category (approved by the project owner, 28 Oct 2026):
+# employer official recruitment pages.
+#
+# Rationale: a page on the employer's own site is the official source by
+# construction, so the link shown to students always satisfies the rule that the
+# final link must be an official post. No third-party board is scraped, and no
+# verification challenge is bypassed.
+#
+# These domains cannot be listed in advance (any Hong Kong employer may have
+# one), so they are gated by URL shape instead: the path must point at a
+# recruitment page or an individual vacancy, never at a news article, course
+# page or aggregator listing. See search_discovery.classify_url.
+# ---------------------------------------------------------------------------
+EMPLOYER_DISCOVERY_ENABLED = True
+
+# Approved employer domains. A page found on one of these is the employer's own
+# recruitment page, so it satisfies the official-link rule.
+# Deliberately a reviewed list rather than "any domain": the first test run of
+# search discovery returned, among genuine Hong Kong pages, United States careers
+# pages (openai.com, anthropic.com), freelance marketplaces, social-media posts and
+# Macau job boards. Those are excluded by not being on this list.
+# Every page rejected by the pipeline is logged with a reason, so this list grows
+# from observed evidence rather than guesswork.
+# All *.edu.hk and *.gov.hk hosts are approved automatically (Hong Kong universities
+# and government departments).
+EMPLOYER_DOMAINS = {
+    "edcosys.com": "Edcosys (雲智未來), Hong Kong AI education company",
+    "eduai.org": "EDU A.I. (智能教育), Hong Kong STEM and AI education company",
+    "fdmgroup.com": "FDM Group, graduate technology programme in Hong Kong",
+    "cathaypacific.com": "Cathay Pacific, Hong Kong",
+    "dataintellect.com": "DataIntellect, technology consultancy with a Hong Kong office",
+}
+
+# Discovery runs through the Tavily search API. The key is supplied as the
+# TAVILY_API_KEY environment variable / GitHub secret and is never stored in the
+# repository. Free allowance: 1,000 searches per month.
+TAVILY_ENDPOINT = "https://api.tavily.com/search"
+TAVILY_MAX_RESULTS = 12
+TAVILY_DAILY_QUERY_LIMIT = 18   # ~540 searches per month, leaving half the allowance spare
+
+# Queries are written in the language recruiters actually use, so that both
+# Chinese-language and English-language recruitment pages are found.
+DISCOVERY_QUERIES = [
+    "香港 人工智能 教育 公司 招聘 應屆畢業生",
+    "香港 教育科技 公司 招聘 人工智能 工程師",
+    "香港 大學 教學助理 人工智能 招聘",
+    "香港 STEM 導師 招聘 應屆畢業生",
+    "香港 數據分析 見習生 招聘 應屆畢業生",
+    "香港 多媒體 設計 教育 招聘 應屆畢業生",
+    "香港 中小學 資訊科技 教學助理 招聘",
+    "Hong Kong EdTech company careers AI engineer graduate",
+    "Hong Kong AI startup careers hiring fresh graduate machine learning",
+    "Hong Kong university research assistant artificial intelligence vacancy",
+    "Hong Kong education technology developer vacancy apply graduate",
+    "Hong Kong data annotation transcription entry level careers",
+]
+
 # Official vacancy / recruitment pages of Hong Kong universities (whitelisted,
 # directly and compliantly scrapeable)
 UNIVERSITY_SOURCES = {
@@ -70,6 +128,7 @@ EXCLUDED_DOMAINS = {
     "linkedin.com", "gradconnection.com", "jobfinder.com", "hirelala.com",
     "sigma.ai", "imerit.com", "glassdoor.com", "ziprecruiter.com",
     "jobstreet.com",  # note: ph.jobstreet.com is the Philippines edition, not Hong Kong
+    "aijobshk.com",   # aggregator of Hong Kong AI jobs; leads only, never a source
 }
 
 # ---------------------------------------------------------------------------

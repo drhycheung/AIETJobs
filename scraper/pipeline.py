@@ -12,6 +12,7 @@ import os
 import sys
 import re
 import io
+import urllib.parse
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
@@ -162,9 +163,13 @@ def assign_tags(job: dict) -> list[str]:
     title_l = job.get("title", "").lower()
     exp = (job.get("experience", "") or "").lower()
     employer = (job.get("employer", "") or "").lower()
-    if job.get("official_type") == "employer_official" and "university" in employer:
+    host = (urllib.parse.urlparse(job.get("official_link", "")).netloc or "").lower()
+    is_university = ("university" in employer or "university" in title_l
+                     or host.endswith(".edu.hk"))
+    if is_university:
         tags.append("University")
-    elif job.get("official_type") == "commercial_board":
+    elif job.get("official_type") in ("commercial_board", "employer_vacancy",
+                                      "employer_careers_page"):
         tags.append("Industry")
     if any(k in title_l for k in ("intern", "trainee", "part-time", "part time",
                                   "实习", "培训生", "培训生")):
@@ -200,6 +205,11 @@ def compliance_check(job: dict, jd_text: str | None = None) -> tuple[bool, str]:
         if sig in text:
             return False, f"Likely non-Hong Kong post: '{sig}'"
     # 3) Deep check of the official JD text (experience / degree): PDF first, then page HTML
+    # An employer recruitment page lists whatever posts happen to be open, so there is
+    # no single job description to check; the page states the requirements itself.
+    if job.get("official_type") == "employer_careers_page":
+        return True, ("Employer recruitment page; requirements are stated on the page "
+                      "and change as individual posts open and close")
     scan = jd_text
     src = "PDF" if job.get("official_type") == "employer_official" else "page HTML"
     if scan is None:
@@ -247,6 +257,12 @@ def compliance_check(job: dict, jd_text: str | None = None) -> tuple[bool, str]:
 # ---------------------------------------------------------------------------
 def verify(job: dict) -> None:
     live, note = fetch.is_live(job.get("official_link", ""))
+    # A status code alone is not proof of life on a job board: an expired post is
+    # served as HTTP 200 with a short "expired" template. Only board links need the
+    # extra read, so official pages cost no additional request.
+    if live and job.get("official_type") == "commercial_board":
+        if fetch.page_says_expired(job.get("official_link", "")):
+            live, note = False, "the page states the post has expired"
     job["verified_date"] = __import__("datetime").date.today().isoformat()
     if not live:
         job["status"] = "expired"

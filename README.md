@@ -13,7 +13,8 @@ A daily automated system for **final-year BSc(AI&EdTech) students at The Educati
 This project is a non-commercial, education-purpose public information aggregation tool serving final-year BSc(AI&EdTech) students at The Education University of Hong Kong. We:
 
 - Crawl directly only the official vacancy pages of universities and public data such as the Hong Kong Labour Department's `jobs.gov.hk`;
-- **Include the major Hong Kong job boards (JobsDB / CTgoodjobs / Recruit / CPjobs) in the whitelist with discovery enabled**: their post links are *discovered* through public search-engine indexing (never script-scraped, never bypassing any verification); discovered links are honestly labelled as "job-board post" (distinct from the employer's official post), and because board deep links are short-lived they are re-discovered daily;
+- **Discover employer recruitment pages through the Tavily search service**: a page on an employer's or university's own site is the official source by construction. Only approved employer domains, Hong Kong university and government sites, and individual job-board vacancies are published; a job board's own category or search page is never published. No job board is scraped and no verification challenge is bypassed;
+- **Include the major Hong Kong job boards (JobsDB / CTgoodjobs / Recruit / CPjobs) in the whitelist for individual vacancies only**; because board deep links are short-lived they are re-discovered daily, and a board page that states the post has expired is withheld;
 - Access at low frequency, comply with `robots.txt`, use an identifiable User-Agent with a contact email;
 - Publish only job metadata and links, never the full JD text, and collect no personal data;
 - Respect copyright and the wishes of each site; takedown requests are honoured immediately.
@@ -26,7 +27,8 @@ For questions or takedown requests, contact: **Dr. HY Cheung** (`hyincheung@eduh
 
 - **Official vacancy pages of Hong Kong universities** (direct crawl): EdUHK (fully implemented), HKU, CUHK, HKUST, PolyU, CityU, HKBU, Lingnan, HKSYU (framework placeholders, being connected)
 - **Hong Kong Labour Department**: `jobs.gov.hk`
-- **Commercial job boards** (discovery enabled; links only, never direct scrape): JobsDB, CTgoodjobs, Recruit, CPjobs
+- **Employer official recruitment pages** (discovered through the Tavily search service, then verified): approved employer domains in `config.EMPLOYER_DOMAINS`, plus all `*.edu.hk` and `*.gov.hk` hosts
+- **Commercial job boards** (individual vacancies only; never direct-scraped): JobsDB, CTgoodjobs, Recruit, CPjobs
 
 **Excluded** (aggregator / scraper / blog sites, never used): hiringcafe, joblum, indeed, linkedin, gradconnection, glassdoor, ziprecruiter, etc. (full list in `scraper/config.py` `EXCLUDED_DOMAINS`).
 

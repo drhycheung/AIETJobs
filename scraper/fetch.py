@@ -13,6 +13,7 @@ import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
+import json
 import socket
 import ssl
 import time
@@ -44,6 +45,16 @@ class IPv4HTTPSHandler(urllib.request.HTTPSHandler):
 
 _opener = urllib.request.build_opener(IPv4HTTPSHandler())
 
+# Markers used by Hong Kong job boards on an expired post (the template class name
+# and the Chinese wording for "this post has ended").
+_EXPIRED_MARKERS = (
+    "jobdetailexpired",
+    "職位已過期",
+    "職位已結束",
+    "此職位已",
+    "廣告已逾期",
+)
+
 
 def _session():
     return _opener
@@ -71,6 +82,26 @@ def fetch_url(url: str, timeout: int | None = None, binary: bool = False):
         return e.code, None
     except Exception as e:  # network / DNS / SSL etc.
         return None, f"{type(e).__name__}: {e}"
+
+
+def post_json(url: str, payload: dict, headers: dict | None = None, timeout: int | None = None):
+    """POST a JSON body and return (status, parsed object). Used for the search API.
+    Reuses the same identifiable User-Agent and IPv4 connection path as other calls."""
+    timeout = timeout or config.REQUEST_TIMEOUT
+    hdrs = _headers()
+    hdrs.update({"Content-Type": "application/json", "Accept": "application/json"})
+    if headers:
+        hdrs.update(headers)
+    req = urllib.request.Request(
+        url, data=json.dumps(payload).encode("utf-8"), headers=hdrs, method="POST")
+    try:
+        with _session().open(req, timeout=timeout) as r:
+            raw = r.read().decode("utf-8", "replace")
+            return r.status, json.loads(raw)
+    except urllib.error.HTTPError as e:
+        return e.code, None
+    except Exception as e:
+        return None, {"error": f"{type(e).__name__}: {e}"}
 
 
 def robots_allowed(url: str) -> bool:
@@ -112,6 +143,18 @@ def is_live(url: str) -> tuple[bool, str]:
     except Exception as e:
         return False, f"{type(e).__name__}"
     return False, "no-response"
+
+
+def page_says_expired(url: str) -> bool:
+    """Some job boards serve an expired post with HTTP 200 and a short template, so a
+    status-code check alone reports a dead post as live. Look for the board's own
+    expired marker. Measured on Recruit, 28 Oct 2026: an expired post returns 200 with
+    a one-line 'jobDetailExpired' template, while a live post returns the full page."""
+    status, html = fetch_url(url)
+    if status != 200 or not html:
+        return False
+    low = html.lower()
+    return any(marker in low for marker in _EXPIRED_MARKERS)
 
 
 def polite_sleep():
