@@ -333,6 +333,13 @@ def run() -> list[dict]:
 
     seen = {}
     for job in raw:
+        # Quick negative-title filter: drop obvious non-technical / non-educational roles
+        title_l = job.get("title", "").lower()
+        if any(nt in title_l for nt in config.NEGATIVE_TITLE_KEYWORDS):
+            job["status"] = "excluded"
+            job["excluded_reason"] = "Negative title keyword"
+            seen[_dedupe_key(job)] = job
+            continue
         cat, cat_score = assign_category(job)
         job["category"] = cat
         job["category_name"] = config.CATEGORIES[cat]["name"]
@@ -343,11 +350,13 @@ def run() -> list[dict]:
         # wrongly letting administrative roles through): if the title matches no
         # direction keyword and no role-relevance keyword, it is off-target.
         title_l = job.get("title", "").lower()
+        snippet = (job.get("description") or "").lower()
         cat_title_score = sum(
             1 for meta in config.CATEGORIES.values()
-            for kw in meta["keywords"] if kw in title_l
+            for kw in meta["keywords"] if kw in title_l or kw in snippet
         )
-        rel_hit = any(k in title_l for k in config.RELEVANCE_KEYWORDS)
+        rel_hit = any(k in title_l or k in snippet for k in config.RELEVANCE_KEYWORDS)
+        # Require at least one positive hit in title or snippet; otherwise exclude
         if cat_title_score == 0 and not rel_hit:
             job["status"] = "excluded"
             job["excluded_reason"] = "No keyword match with the AI/EdTech/data/teaching directions"

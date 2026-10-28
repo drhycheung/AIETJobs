@@ -227,6 +227,13 @@ RELEVANCE_KEYWORDS = [
     "artificial intelligence", "language", "smart",
 ]
 
+# Negative title keywords: immediate rejection if title contains any of these
+NEGATIVE_TITLE_KEYWORDS = [
+    "sales", "customer service", "account", "marketing", "branch", "store",
+    "reception", "cashier", "barista", "waiter", "waitress", "driver",
+    "personal assistant", "pa ", "administrative assistant", "admin officer",
+]
+
 # ---------------------------------------------------------------------------
 # Compliance filter: signals that must be "rejected" in the title / description
 # (requires experience / licence / Master's / closed / non-Hong Kong)
