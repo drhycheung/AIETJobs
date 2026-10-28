@@ -8,9 +8,9 @@ on:
     # 07:00 Hong Kong time (UTC+8) = 23:00 UTC the previous day
     - cron: '0 23 * * *'
 
-# Allow the GITHUB_TOKEN to deploy to Pages
+# Allow the GITHUB_TOKEN to commit the refreshed data and deploy to Pages
 permissions:
-  contents: read
+  contents: write
   pages: write
   id-token: write
 
@@ -28,6 +28,9 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          # Full history so the daily commit can be pushed from the runner
+          fetch-depth: 0
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -38,6 +41,21 @@ jobs:
         # If crawling fails, still deploy the last committed site
         continue-on-error: true
         run: python scraper/run.py
+
+      - name: Commit refreshed data
+        # Pushes made with the repository's GITHUB_TOKEN do not start a new
+        # workflow run, so this cannot loop. The deployment below still runs in
+        # this same run, using the files just generated.
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add site data REPORT.md
+          if git diff --staged --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "chore: daily job data update $(date -u +%F)"
+            git push
+          fi
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
