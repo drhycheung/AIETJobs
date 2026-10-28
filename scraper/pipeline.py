@@ -19,6 +19,8 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import config
 import fetch
 from live import collect_all
+import os
+import requests
 
 try:
     from pypdf import PdfReader
@@ -270,6 +272,52 @@ def verify(job: dict) -> None:
     else:
         job["status"] = "active"
         job["notes"] = (job.get("notes", "") + f" Link verified: {note}").strip()
+
+
+def openrouter_judge_summary(text: str, title: str = "", max_tokens: int = 60) -> tuple[str, str]:
+    """Call OpenRouter (free model) to produce (summary, suitability_note).
+    Returns empty strings on failure. Uses OPENROUTER_API_KEY from env.
+    This is conservative and small to avoid exhausting free-model quota."""
+    key = os.environ.get("OPENROUTER_API_KEY")
+    if not key or not text:
+        return "", ""
+    prompt_summary = (
+        "You are a concise assistant. Produce a single short sentence (<=40 words)"
+        " summary of the following job description suitable for a job-card.\n\nJob title: " + title + "\n\nDescription:\n" + text
+    )
+    prompt_judge = (
+        "Answer YES or NO and one short reason (<=20 words) whether this job is suitable"
+        " for a fresh bachelor (BSc AI & EdTech) graduate. Format exactly: YES|<reason> or NO|<reason>."
+        "\n\nJob title: " + title + "\n\nDescription:\n" + text
+    )
+    url = "https://openrouter.ai/api/v1/chat/completions"
+    headers = {"Authorization": f"Bearer {key}", "Content-Type": "application/json"}
+    try:
+        # summary
+        payload = {"model": "openrouter/free", "messages": [{"role": "user", "content": prompt_summary}], "max_tokens": max_tokens}
+        r = requests.post(url, headers=headers, json=payload, timeout=20)
+        if r.status_code != 200:
+            return "", ""
+        j = r.json()
+        summ = ""
+        try:
+            summ = j.get("choices", [])[0].get("message", {}).get("content", "").strip()
+        except Exception:
+            summ = ""
+        # judgement
+        payload2 = {"model": "openrouter/free", "messages": [{"role": "user", "content": prompt_judge}], "max_tokens": 40}
+        r2 = requests.post(url, headers=headers, json=payload2, timeout=20)
+        if r2.status_code != 200:
+            return summ, ""
+        j2 = r2.json()
+        note = ""
+        try:
+            note = j2.get("choices", [])[0].get("message", {}).get("content", "").strip()
+        except Exception:
+            note = ""
+        return summ, note
+    except Exception:
+        return "", ""
 
 
 # ---------------------------------------------------------------------------
