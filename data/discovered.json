@@ -1,7 +1,31 @@
 {
-  "updated_at": "2026-10-28",
+  "updated_at": "2026-10-29",
   "note": "Leads found by the Tavily search API. Each entry records the day it was first and last seen; rejected results are not stored.",
   "leads": [
+    {
+      "title": "Jobs | Robot Institute of HK",
+      "employer": "",
+      "official_link": "https://www.robot.edu.hk/jobs",
+      "kind": "careers_page",
+      "discover_source": "Tavily search",
+      "query": "香港 人工智能 教育 公司 招聘 應屆畢業生",
+      "classify_note": "employer recruitment page",
+      "snippet": "Balance your work and personal life with customizable teaching hours (especially for part-time roles).\n\nOutstanding performers may transition to full-time roles with career advancement paths in the STEAM education field.\n\nEnjoy attractive hourly rates or salary packages with performance-based bonuses.\n\nWork with Hong Kong’s market leader in STEAM education, building a strong professional profile a",
+      "first_seen": "2026-10-29",
+      "last_seen": "2026-10-29"
+    },
+    {
+      "title": "香港金融管理局 - 金管局見習經理計劃",
+      "employer": "",
+      "official_link": "https://www.hkma.gov.hk/chi/about-us/join-us/opportunities-for-students-and-graduates-to-join-the-hkma/manager-trainee-programme",
+      "kind": "careers_page",
+      "discover_source": "Tavily search",
+      "query": "香港 科技 畢業培訓生計劃 應屆畢業生 資訊科技 2027",
+      "classify_note": "employer recruitment page",
+      "snippet": "金管局資訊中心\n\n展覽館圖書館紀念品\n\n加入我們\n\n為何選擇金管局我們的工作職位空缺學生和畢業生加入金管局的機會\n\n招標公告\n\n關連機構及相關網站\n\n金管局的關連機構及連結香港特區政府及有關機構中央銀行多邊組織其他\n\n Eng 简\n 字體大小 A A A\n 打印\n 聯絡我們\n FacebookInstagramLinkedinXiaoHungShuWechatXYoutube\n\n主頁 / 關於我們 / 加入我們 / 學生和畢業生加入金管局的機會 / 金管局見習經理計劃\n\n# 金管局見習經理計劃\n\n金管局提供為期兩年的見習經理計劃，旨在培育有志投身中央銀行工作的年青人，成為未來的管理骨幹，為香港的金融穩定和繁榮作出貢獻。\n\n見習經理會獲安排在兩至三個不同部門工作，接受在職培訓，以了解金管局在維持貨幣和金融體系穩定的職能。\n\n表現理想的見習經理在完成計劃後會獲聘為經理。\n\n你準備好了嗎？\n\n加",
+      "first_seen": "2026-10-29",
+      "last_seen": "2026-10-29"
+    },
     {
       "title": "香港金融管理局 - 金管局見習經濟師計劃",
       "employer": "",
@@ -12,19 +36,19 @@
       "classify_note": "employer recruitment page",
       "snippet": "金管局資訊中心\n\n展覽館圖書館紀念品\n\n加入我們\n\n為何選擇金管局我們的工作職位空缺學生和畢業生加入金管局的機會\n\n招標公告\n\n關連機構及相關網站\n\n金管局的關連機構及連結香港特區政府及有關機構中央銀行多邊組織其他\n\n Eng 简\n 字體大小 A A A\n 打印\n 聯絡我們\n FacebookInstagramLinkedinXiaoHungShuWechatXYoutube\n\n主頁 / 關於我們 / 加入我們 / 學生和畢業生加入金管局的機會 / 金管局見習經濟師計劃\n\n# 金管局見習經濟師計劃\n\n金管局提供為期兩年的見習經濟師計劃，旨在培育對經濟研究有興趣的年青人，讓他們發揮所長，為金管局提供重要的經濟和金融市場分析，有助其履行在維持貨幣及金融體系穩定方面的工作。\n\n在兩年期內，見習經濟師會在兩至三個不同部門工作，負責經濟研究或宏觀金融狀況監察。\n\n表現理想的見習經濟師在完成計劃後會獲",
       "first_seen": "2026-10-28",
-      "last_seen": "2026-10-28"
+      "last_seen": "2026-10-29"
     },
     {
-      "title": "香港金融管理局 - 學生和畢業生加入金管局的機會",
+      "title": "Job Openings | Hong Kong International School",
       "employer": "",
-      "official_link": "https://www.hkma.gov.hk/chi/about-us/join-us/opportunities-for-students-and-graduates-to-join-the-hkma",
+      "official_link": "https://www.hkis.edu.hk/careers/job-openings",
       "kind": "careers_page",
       "discover_source": "Tavily search",
-      "query": "香港 數據分析 見習生 招聘 應屆畢業生",
+      "query": "Hong Kong international school STEM teacher AI computing graduate",
       "classify_note": "employer recruitment page",
-      "snippet": "金管局資訊中心\n\n展覽館圖書館紀念品\n\n加入我們\n\n為何選擇金管局我們的工作職位空缺學生和畢業生加入金管局的機會\n\n招標公告\n\n關連機構及相關網站\n\n金管局的關連機構及連結香港特區政府及有關機構中央銀行多邊組織其他\n\n Eng 简\n 字體大小 A A A\n 打印\n 聯絡我們\n FacebookInstagramLinkedinXiaoHungShuWechatXYoutube\n\n主頁 / 關於我們 / 加入我們 / 學生和畢業生加入金管局的機會\n\n# 學生和畢業生加入金管局的機會\n\n 金管局見習經理計劃\n\n  金管局提供為期兩年的見習經理計劃，旨在培育有志投身中央銀行工作的年青人，成為未來的管理骨幹，為香港的金融穩定和繁榮出力。\n\n  了解更多\n 金管局見習經濟師計劃\n\n  金管局提供為期兩年的見習經濟師計劃，旨在培育對經濟研究有興趣的年青人，讓他們發揮所長，為金管局提供重要的經濟和金融市",
-      "first_seen": "2026-10-28",
-      "last_seen": "2026-10-28"
+      "snippet": "To apply to be a substitute teacher, please click here to complete the application. If you have any inquiries, please contact (/cdn-cgi/l/email-protection#493b2c2a3b3c203d242c273d092122203a672c2d3c672122 \"mailto:recruitment@hkis.edu.hk\").\n\nVisit us on LinkedIn\n\n#####\n\n#### Careers\n\n Working at HKIS\n Job Openings\n\nMore in...\n\nCareers\n\n Working at HKIS\n Job Openings\n\n## This website uses cookies\n\nTo",
+      "first_seen": "2026-10-29",
+      "last_seen": "2026-10-29"
     },
     {
       "title": "EDU A.I. 人才招聘",
@@ -32,11 +56,11 @@
       "official_link": "https://www.eduai.org/about-us/career",
       "kind": "careers_page",
       "discover_source": "Tavily search",
-      "query": "香港 教育科技 公司 招聘 人工智能 工程師",
+      "query": "香港 教育科技 公司 招聘 人工智能 工程師 畢業生",
       "classify_note": "employer recruitment page",
       "snippet": "EDU A.I.智能教育logo\n\n數字教育\n\n服務對象免費AI改卷工具免費AI問功課程式\n\nAI及STEAM資源中心\n\n關於我們\n\n關於我們\n\n\n\nWhatsapp   \n聯絡我們)\n\n首頁\n\n/\n\n人才招聘\n\n# 加入我們\n\n# 成為STEM教育者\n\n我們的團隊一直在不斷擴大，歡迎請對STEM教育和人工智慧抱有濃厚興趣的人才加入。我們重視團隊合作，並提供良好的專業發展機會，培育你在STEM領域的技能和知識。\n\n## 職位空缺\n\n專業STEM教師（兼職或全職）\n\nSTEM產品工程師\n\n課程規劃主任\n\nEDU A.I.成員正在講解公司\n\n若未見有合適職位空缺，我們亦歡迎有意人士將履歷寄至info@parami.ai。  \n  \n我們將在有相關職位出現時聯繫你。\n\nEDU A.I.智能教育logo\n\n集團\n\nParami AI柏拉美logo\n\nparami.ai\n\n合作伙伴\n\nRent a",
       "first_seen": "2026-10-28",
-      "last_seen": "2026-10-28"
+      "last_seen": "2026-10-29"
     },
     {
       "title": "加入我們 Careers｜Edcosys 雲智未來｜AI 教育公司",
@@ -44,11 +68,11 @@
       "official_link": "https://www.edcosys.com/careers",
       "kind": "careers_page",
       "discover_source": "Tavily search",
-      "query": "香港 教育科技 公司 招聘 人工智能 工程師",
+      "query": "香港 教育科技 公司 招聘 人工智能 工程師 畢業生",
       "classify_note": "employer recruitment page",
-      "snippet": "申請此職位Apply for this role\n\n開發Engineering\n\n### AI 課程開發工程師AI Curriculum Engineer\n\n全職：香港中環／科學園Full-time: Central / Science Park\n\n開發課程工具、自動化內部工作流程，並建立用於教學的示範應用（App、聊天機械人、數字人），讓教學內容可重複、可示範。Build course tooling, automate internal workflows, and create teaching demo apps (apps, chatbots, digital humans) that make the curriculum repeatable and demonstrable.\n\n#### 要求Requirements [...] Edcosys 是一間香港 AI 教育公司，",
+      "snippet": "Edcosys 是一間香港 AI 教育公司，教學生與企業團隊以自然語言（Vibe Coding）指揮 AI，建立真正能用的工具。我們現正擴充教學與開發團隊，招聘對 AI 教育有熱誠、能實際交付成果的導師與開發者。Edcosys is a Hong Kong AI education company that teaches students and business teams to direct AI in plain language, building real, working tools. We are growing our teaching and engineering teams and hiring instructors and developers who are genuinely passionate about AI education and can del",
       "first_seen": "2026-10-28",
-      "last_seen": "2026-10-28"
+      "last_seen": "2026-10-29"
     },
     {
       "title": "官立中學及小學非公務員職位空缺 - 教育局",
@@ -59,6 +83,126 @@
       "query": "香港 中小學 資訊科技 教學助理 招聘",
       "classify_note": "employer recruitment page",
       "snippet": "新來港兒童入學安排 -\n\n適應課程 -\n\n學校資料 -\n\n校本支援計劃津貼\n\n< 返回\n\n目錄 > 學生及家長相關 >\n\n非華語學童\n\n-\n\n非華語學童教育服務 -\n\n最新資訊 -\n\n概覽\n\n< 返回\n\n目錄 > 學生及家長相關 >\n\n資訊科技教育\n\n-\n\n運用電子學習模式支援學生在家學習 -\n\n家長易學站\n\n< 返回\n\n目錄 > 學生及家長相關 >\n\n計劃及設施\n\n-\n\n計劃 -\n\n設施\n\n< 返回\n\n目錄 > 學生及家長相關 >\n\n家長相關\n\n-\n\n幼稚園階段家長教育資訊 -\n\n家長電子專遞 -\n\n家長教育 -\n\n家校合作 -\n\n家長講座\n\n< 返回\n\n目錄 >\n\n學生及家長相關\n\n-\n\n學校資料 -\n\n生涯規劃教育及升學就業輔導 -\n\n學位分配系統 -\n\n學位安排支援服務 -\n\n特殊教育 -\n\n支援及資助 -\n\n安全事宜 -\n\n防止學生自殺及關注學生精神健康 -\n\n學生訓育及輔導 -",
+      "first_seen": "2026-10-28",
+      "last_seen": "2026-10-29"
+    },
+    {
+      "title": "職位空缺 | 數字政策辦公室",
+      "employer": "",
+      "official_link": "https://www.digitalpolicy.gov.hk/tc/about_us/vacancies",
+      "kind": "careers_page",
+      "discover_source": "Tavily search",
+      "query": "香港 數碼 資訊科技 畢業培訓生 招聘 2027",
+      "classify_note": "employer recruitment page",
+      "snippet": "國家載人航天工程專題網頁\n\n2026年選舉委員會界別分組一般選舉\n\n行政長官2026年施政報告\n\n香港特別行政區經濟和社會發展第一個五年規劃（2026–2030年）\n\n結伴行山　安全至上\n\n「友智識」數碼共融計劃\n\n「友智識」長者進階數碼培訓計劃：2026-2028年度課程現正接受報名 費用全免\n\n2026-27年度財政預算案\n\n2026年人口普查\n\n一站式專題網頁連結中小企有關減碳和碳審計的資訊和服務\n\n「智方便」\n\n「友智識」長者數碼外展計劃：新一輪數碼外展活動已經展開\n\n支持社企　日日友建樹 \n\n檢視衞生黑點\n\n立法管制大麻二酚（CBD）\n\n全民國家安全教育日 \n\n電子健康系統（醫健通）\n\n完善選舉制度　落實愛國者治港\n\n空間數據共享平台網站\n\n維護國家安全\n\n多功能智慧燈柱\n\n資訊及通訊科技活動日誌\n\n智慧政府創新實驗室\n\ntalent.gov.hk\n\n新專利制度\n\n「友智識」樂齡",
+      "first_seen": "2026-10-29",
+      "last_seen": "2026-10-29"
+    },
+    {
+      "title": "CityUHK e-Recruitment System",
+      "employer": "",
+      "official_link": "https://jobs1.cityu.edu.hk/apply/Default.aspx?jobtype=RS",
+      "kind": "careers_page",
+      "discover_source": "Tavily search",
+      "query": "Hong Kong university research assistant artificial intelligence vacancy",
+      "classify_note": "employer recruitment page",
+      "snippet": "| Postdoctoral Fellow | Department of Neuroscience | Applications will be considered until the position(s) is/are filled |  |\n| Research Assistant | Department of Social and Behavioural Sciences | Applications will be considered until the position(s) is/are filled |  |\n| Postdoctoral Fellow/Research Assistant | Hong Kong Institute of AI for Science | Applications will be considered until the posit",
+      "first_seen": "2026-10-29",
+      "last_seen": "2026-10-29"
+    },
+    {
+      "title": "Highlight Job Postings | CU Careers",
+      "employer": "",
+      "official_link": "https://cpdc.osa.cuhk.edu.hk/en/find-a-job/highlight-job-postings",
+      "kind": "careers_page",
+      "discover_source": "Tavily search",
+      "query": "Hong Kong EdTech company careers AI engineer graduate",
+      "classify_note": "employer recruitment page",
+      "snippet": "| AI and Automation Engineering Graduate Programme | FDM Group HK Limited | 01 Nov 2026 |\n| 2027 P&G Internship Program- Finance Intern | P&G | 02 Nov 2026 |\n| 2027 P&G Graduate Program- Brand Manager | P&G | 02 Nov 2026 |\n| 2027 P&G Internship Program- Sales Intern | P&G | 02 Nov 2026 |\n| 2027 P&G Internship Program- Product Supply Intern | P&G | 02 Nov 2026 |\n| 2027 P&G Graduate Program- Finance",
+      "first_seen": "2026-10-29",
+      "last_seen": "2026-10-29"
+    },
+    {
+      "title": "Data Engineering Graduate Programme  in Hong Kong - FDM Group",
+      "employer": "",
+      "official_link": "https://careers.fdmgroup.com/vacancies/2541/data-engineering-graduate-programme.html",
+      "kind": "job_post",
+      "discover_source": "Tavily search",
+      "query": "Hong Kong technology graduate trainee programme 2027 AI data",
+      "classify_note": "individual vacancy on the employer's own site",
+      "snippet": "### Log in to your account\n\n### Log in to your account\n\n# Data Engineering Graduate Programme\n\n## About The Role\n\nShape the Future of Data and AI with Us. [...] The age of data-driven transformation and AI-powered solutions is here, and we are at the forefront of this revolution. At FDM, we collaborate with forward-thinking clients on cutting-edge projects that harness the potential of data and ar",
+      "first_seen": "2026-10-28",
+      "last_seen": "2026-10-29"
+    },
+    {
+      "title": "Graduate Tech Accelerator Programme EOI 2027 in Hong Kong - FDM Group",
+      "employer": "",
+      "official_link": "https://careers.fdmgroup.com/vacancies/2527/graduate-tech-accelerator-programme-eoi-2027.html",
+      "kind": "job_post",
+      "discover_source": "Tavily search",
+      "query": "Hong Kong technology graduate trainee programme 2027 AI data",
+      "classify_note": "individual vacancy on the employer's own site",
+      "snippet": "Tech careers should be for everyone. With 75+ nationalities represented, FDM thrives on diversity, fuels innovation through unique perspectives, and celebrates success together. As an Equal Opportunity Employer and FTSE4Good-listed company, we ensure every qualified applicant gets a fair shot—no barriers, just opportunities.  \n\nShare\n\n## Other jobs like this\n\n### AI Engineer\n\n### Technical Skills ",
+      "first_seen": "2026-10-29",
+      "last_seen": "2026-10-29"
+    },
+    {
+      "title": "畢業培訓生計劃",
+      "employer": "",
+      "official_link": "https://careers.cathaypacific.com/zh/careers/our-teams/early-careers-students-and-graduates/graduate-trainee",
+      "kind": "careers_page",
+      "discover_source": "Tavily search",
+      "query": "香港 數碼 資訊科技 畢業培訓生 招聘 2027",
+      "classify_note": "employer recruitment page",
+      "snippet": "職業發展\n\n作為一名畢業培訓生，透過在職培訓及觀察管理層工作，你將接觸不同團隊及項目。其後你將專注於兩個選定的範疇，深入發展專業知識。成功完成計劃後，你將晉升為其中一個團隊的助理經理。若達到所需能力和潛力的話，更有機會在八年內晉升為經理。\n\nalt\n\n招聘時間表\n\n 申請截止日期：2026 年 11 月 15 日\n 能力測驗及影片面試：2026 年 11 月中旬至 12 月\n 面試流程：2027 年 1 月至 2 月\n 錄取通知：2027 年 3 月\n 入職日期：2027 年 8 月\n\n立即申請\n\n四位專業人士正在討論業務\n\n數碼及資訊科技（香港及大灣區）\n\n數碼及資訊科技畢業培訓生計劃\n\n開啟非凡旅程，激發潛能，成就夢想，並與全球頂尖數碼及資訊科技團隊一起突破界限，攜手創新。\n\n## 計劃簡介\n\n在國泰，我們的數碼及資訊科技團隊在塑造航空科技的未來中扮演重要角色。我們為有志成為科技領袖的",
+      "first_seen": "2026-10-29",
+      "last_seen": "2026-10-29"
+    },
+    {
+      "title": "2027 數碼及資訊科技畢業培訓生計劃 （香港及大灣區）",
+      "employer": "",
+      "official_link": "https://careers.cathaypacific.com/zh/careers/jobs/hong-kong/2027-digital-it-graduate-trainee-programme-hk-gba-32408",
+      "kind": "careers_page",
+      "discover_source": "Tavily search",
+      "query": "香港 數據分析 見習生 招聘 應屆畢業生",
+      "classify_note": "employer recruitment page",
+      "snippet": "## 主要職責\n\n 了解國泰資訊科技、數碼轉型及整體組織的宗旨、架構、策略、價值觀及推動因素\n 深入掌握並完成於不同團隊及部門崗位輪換期間的所有學習目標，包括：IT解決方案中心、基礎架構與安全管理、數碼、數據分析及戰略與規劃\n 建立對航空公司核心系統與應用的全面認識，並參與IT前線支援工作，獲得面對面客戶服務的實戰經驗\n 應用技術最佳實務、標準及治理框架，支持數碼化項目的發展，並助力國泰實現科技領先地位\n 提出創新意念，善用最新科技為業務創造競爭優勢\n 負責全權籌備國泰科創馬拉松 (Cathay Hackathon) - 企業年度旗艦活動 - 涵蓋整體規劃、內部與外部溝通、利害關係人 及後勤管理等工作，並於第二年擔任領導角色完成整個活動策劃\n\n## 資格 / 經驗要求 [...] ## 資格 / 經驗要求\n\n 應屆畢業生或畢業兩年內的往屆畢業生，須持有學士或以上學位（不限學科）；持有數碼／",
+      "first_seen": "2026-10-28",
+      "last_seen": "2026-10-29"
+    },
+    {
+      "title": "2027 Engineering Graduate Trainee Programme",
+      "employer": "",
+      "official_link": "https://careers.cathaypacific.com/en/careers/jobs/hong-kong/2027-engineering-graduate-trainee-programme-32407",
+      "kind": "careers_page",
+      "discover_source": "Tavily search",
+      "query": "Hong Kong technology graduate trainee programme 2027 AI data",
+      "classify_note": "employer recruitment page",
+      "snippet": "Final year students or recent graduates (within 2 years of graduation) in Engineering, Aerospace or a related discipline\n Right to work in Hong Kong (eligible visa holders are also welcome, including via the Top Talent Pass Scheme (TTPS) and Immigration Arrangements for Non-local Graduates (IANG))\n Strong analytical and problem-solving skills\n Excellent communication skills in English\n Demonstrate",
+      "first_seen": "2026-10-29",
+      "last_seen": "2026-10-29"
+    },
+    {
+      "title": "2027 Digital & IT Graduate Trainee Programme (HK & GBA)",
+      "employer": "",
+      "official_link": "https://careers.cathaypacific.com/en/careers/jobs/hong-kong/2027-digital-it-graduate-trainee-programme-hk-gba-32408",
+      "kind": "careers_page",
+      "discover_source": "Tavily search",
+      "query": "Hong Kong technology graduate trainee programme 2027 AI data",
+      "classify_note": "employer recruitment page",
+      "snippet": "Digital & IT Graduate Trainee Programme is designed to provide trainees with a concrete professional foundation through rotations across core Information Technology (IT) and Digital disciplines in our Hong Kong headquarters and the Greater Bay Area (GBA).\n\nThrough a well-defined development framework, trainees will gain hands-on experience, build industry knowledge, and develop the skills needed t",
+      "first_seen": "2026-10-29",
+      "last_seen": "2026-10-29"
+    },
+    {
+      "title": "香港金融管理局 - 學生和畢業生加入金管局的機會",
+      "employer": "",
+      "official_link": "https://www.hkma.gov.hk/chi/about-us/join-us/opportunities-for-students-and-graduates-to-join-the-hkma",
+      "kind": "careers_page",
+      "discover_source": "Tavily search",
+      "query": "香港 數據分析 見習生 招聘 應屆畢業生",
+      "classify_note": "employer recruitment page",
+      "snippet": "金管局資訊中心\n\n展覽館圖書館紀念品\n\n加入我們\n\n為何選擇金管局我們的工作職位空缺學生和畢業生加入金管局的機會\n\n招標公告\n\n關連機構及相關網站\n\n金管局的關連機構及連結香港特區政府及有關機構中央銀行多邊組織其他\n\n Eng 简\n 字體大小 A A A\n 打印\n 聯絡我們\n FacebookInstagramLinkedinXiaoHungShuWechatXYoutube\n\n主頁 / 關於我們 / 加入我們 / 學生和畢業生加入金管局的機會\n\n# 學生和畢業生加入金管局的機會\n\n 金管局見習經理計劃\n\n  金管局提供為期兩年的見習經理計劃，旨在培育有志投身中央銀行工作的年青人，成為未來的管理骨幹，為香港的金融穩定和繁榮出力。\n\n  了解更多\n 金管局見習經濟師計劃\n\n  金管局提供為期兩年的見習經濟師計劃，旨在培育對經濟研究有興趣的年青人，讓他們發揮所長，為金管局提供重要的經濟和金融市",
       "first_seen": "2026-10-28",
       "last_seen": "2026-10-28"
     },
@@ -99,18 +243,6 @@
       "last_seen": "2026-10-28"
     },
     {
-      "title": "Data Engineering Graduate Programme  in Hong Kong - FDM Group",
-      "employer": "",
-      "official_link": "https://careers.fdmgroup.com/vacancies/2541/data-engineering-graduate-programme.html",
-      "kind": "job_post",
-      "discover_source": "Tavily search",
-      "query": "Hong Kong EdTech company careers AI engineer graduate",
-      "classify_note": "individual vacancy on the employer's own site",
-      "snippet": "### Log in to your account\n\n### Log in to your account\n\n# Data Engineering Graduate Programme\n\n## About The Role\n\nShape the Future of Data and AI with Us. [...] The age of data-driven transformation and AI-powered solutions is here, and we are at the forefront of this revolution. At FDM, we collaborate with forward-thinking clients on cutting-edge projects that harness the potential of data and ar",
-      "first_seen": "2026-10-28",
-      "last_seen": "2026-10-28"
-    },
-    {
       "title": "Software Engineering Graduate Programme │ International students│Hong Kong based  in Hong Kong - FDM Group",
       "employer": "",
       "official_link": "https://careers.fdmgroup.com/vacancies/1721/software-engineering-graduate-programme--international-students-hong-kong-based.html",
@@ -119,18 +251,6 @@
       "query": "Hong Kong education technology developer vacancy apply graduate",
       "classify_note": "individual vacancy on the employer's own site",
       "snippet": "🌍 19 centres across APAC, North America, Europe & the UK   \n🚀 25,000+ careers launched   \n🤝 300+ industry-leading client partners \n\nWe are proud to be an Equal Opportunity Employer and part of the FTSE4Good Index. With over 80 nationalities represented globally, diversity and inclusion remain at the core of who we are. \n\nReady tobuild your future in Hong Kong?\n\nIf you’re preparing to return home a",
-      "first_seen": "2026-10-28",
-      "last_seen": "2026-10-28"
-    },
-    {
-      "title": "2027 數碼及資訊科技畢業培訓生計劃 （香港及大灣區）",
-      "employer": "",
-      "official_link": "https://careers.cathaypacific.com/zh/careers/jobs/hong-kong/2027-digital-it-graduate-trainee-programme-hk-gba-32408",
-      "kind": "careers_page",
-      "discover_source": "Tavily search",
-      "query": "香港 數據分析 見習生 招聘 應屆畢業生",
-      "classify_note": "employer recruitment page",
-      "snippet": "## 主要職責\n\n 了解國泰資訊科技、數碼轉型及整體組織的宗旨、架構、策略、價值觀及推動因素\n 深入掌握並完成於不同團隊及部門崗位輪換期間的所有學習目標，包括：IT解決方案中心、基礎架構與安全管理、數碼、數據分析及戰略與規劃\n 建立對航空公司核心系統與應用的全面認識，並參與IT前線支援工作，獲得面對面客戶服務的實戰經驗\n 應用技術最佳實務、標準及治理框架，支持數碼化項目的發展，並助力國泰實現科技領先地位\n 提出創新意念，善用最新科技為業務創造競爭優勢\n 負責全權籌備國泰科創馬拉松 (Cathay Hackathon) - 企業年度旗艦活動 - 涵蓋整體規劃、內部與外部溝通、利害關係人 及後勤管理等工作，並於第二年擔任領導角色完成整個活動策劃\n\n## 資格 / 經驗要求 [...] ## 資格 / 經驗要求\n\n 應屆畢業生或畢業兩年內的往屆畢業生，須持有學士或以上學位（不限學科）；持有數碼／",
       "first_seen": "2026-10-28",
       "last_seen": "2026-10-28"
     }

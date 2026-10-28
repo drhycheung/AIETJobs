@@ -303,7 +303,7 @@ def write_report(jobs: list[dict]):
     lines.append("")
 
     lines.append("## ⚠️ To-do / notes\n")
-    lines.append("- Commercial job boards (JobsDB / CTgoodjobs / Recruit / CPjobs) deep links expire in about 30 days and are re-discovered daily; currently they rely on manually recorded leads in `data/discovered.json` (no search API configured). Full automation is possible once a search API is connected.")
+    lines.append("- Discovery runs through the Tavily search API (key supplied as the `TAVILY_API_KEY` repository secret / environment variable; never stored in the repo). With the key set, fresh employer / university recruitment pages and individual vacancies are found daily and re-verified; without it, the pipeline falls back to the manually recorded leads in `data/discovered.json`.")
     lines.append("- The other 7 universities (HKU / CUHK / HKUST / PolyU / CityU / HKBU / Lingnan) ATS systems are mostly JS shells / certificate / gateway issues inside the sandbox and are not yet connected; `live.py` already has a framework, and connecting them will expand daily coverage.")
     lines.append("- All links pass the `is_live` liveness check; those that fail are marked `expired` and not shown to students.")
     lines.append("")

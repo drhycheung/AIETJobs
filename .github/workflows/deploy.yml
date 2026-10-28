@@ -49,6 +49,10 @@ jobs:
           # Search API used for discovery; the key is a repository secret and is
           # never written into the repository.
           TAVILY_API_KEY: ${{ secrets.TAVILY_API_KEY }}
+          # Optional: free-tier OpenRouter key used only for the lightweight
+          # "fit note" enrichment (model openrouter/free). Left unset is fine;
+          # the pipeline degrades gracefully when it is not provided.
+          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
         run: python scraper/run.py
 
       - name: Commit refreshed data

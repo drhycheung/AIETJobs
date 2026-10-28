@@ -12,6 +12,7 @@ import os
 import sys
 import re
 import io
+import datetime
 import urllib.parse
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -39,6 +40,42 @@ def _text_of(job: dict) -> str:
     ]).lower()
 
 
+def _full_text(job: dict) -> str:
+    """Title + department + employer + description (used for fit scoring and
+    categorisation, so board-post descriptions also contribute signal)."""
+    return " ".join([
+        job.get("title", ""), job.get("department", ""),
+        job.get("employer", ""), job.get("description", "") or "",
+    ]).lower()
+
+
+def _parse_date(s):
+    if not s:
+        return None
+    s = str(s).strip()
+    for fmt in ("%d %b %Y", "%d %B %Y", "%Y-%m-%d", "%Y/%m/%d"):
+        try:
+            return datetime.datetime.strptime(s, fmt).date()
+        except ValueError:
+            pass
+    return None
+
+
+def staleness(job: dict) -> tuple[bool, str]:
+    """Return (is_stale, reason). A post with a past deadline is expired; a post
+    with no closing date and posted long ago is treated as stale, because the
+    liveness check only does HTTP 200 (a still-hosted but closed PDF passes)."""
+    today = datetime.date.today()
+    dl = _parse_date(job.get("deadline"))
+    if dl and dl < today:
+        return True, f"Application deadline {job.get('deadline')} has passed"
+    pd = _parse_date(job.get("posted_date"))
+    if pd and (today - pd).days > config.STALE_POST_DAYS and not dl:
+        return True, (f"Posted {job.get('posted_date')} with no closing date "
+                      f"(> {config.STALE_POST_DAYS} days ago, likely stale)")
+    return False, ""
+
+
 def assign_category(job: dict) -> tuple[int, int]:
     """Return (best category, keyword hit count for that category).
     A hit count of 0 means no match with the five directions."""
@@ -53,30 +90,58 @@ def assign_category(job: dict) -> tuple[int, int]:
 
 # ---------------------------------------------------------------------------
 # Star fit-score (BSc AI&EdTech competency profile)
+# Weighted so that genuinely on-target AI / EdTech / tech roles earn 3 stars and
+# rise to the top, while generic teaching / assistant roles stay at 1 star.
 # ---------------------------------------------------------------------------
-_STRONG = {"ai", "artificial intelligence", "machine learning", "ml", "nlp",
-           "education", "educational", "edtech", "learning", "teaching",
-           "computer vision", "人工智能", "教育", "教学", "學習"}
+_AI_RE = re.compile(r"\bai\b", re.I)
+_STRONG = {
+    "artificial intelligence", "machine learning", "ml", "deep learning", "nlp",
+    "computer vision", "genai", "edtech", "education technology", "ai education",
+    "人工智能", "人工智慧", "機器學習", "教育科技", "ai 教學", "教學科技",
+    "llm", "generative", "大模型", "生成式", "chatbot", "gpt",
+}
+_COMPETENCY = {
+    "python", "software", "developer", "programming", "programme", "data",
+    "data science", "data analytics", "big data", "stem", "curriculum",
+    "課程", "程式", "軟件", "軟體", "開發", "工程", "engineer", "engineering",
+    "數據", "科技", "資訊科技", "數碼", "算法", "演算法", "cloud", "雲",
+    "web", "前端", "後端", "全端", "backend", "fullstack", "multimedia", "多媒體",
+}
+_CONTEXT = {
+    "education", "educational", "teaching", "learning", "教學", "教学", "教育",
+    "research", "研究", "intern", "實習", "見習", "trainee", "培訓生",
+}
 
 
 def fit_score(job: dict, cat_score: int = 0) -> tuple[int, str]:
-    text = _text_of(job)
-    hits = []
+    text = _full_text(job)
+    hits: list[str] = []
     raw = 0
-    for kw in config.FIT_KEYWORDS:
-        if kw.lower() in text:
+    for kw in _STRONG:
+        if kw in text:
             hits.append(kw)
-            raw += 2 if kw.lower() in _STRONG else 1
+            raw += 3
+    if _AI_RE.search(text):
+        hits.append("ai")
+        raw += 3
+    for kw in _COMPETENCY:
+        if kw in text:
+            hits.append(kw)
+            raw += 2
+    for kw in _CONTEXT:
+        if kw in text:
+            hits.append(kw)
+            raw += 1
     cat = assign_category(job)[0]
     cat_name = config.CATEGORIES[cat]["name"]
-    # Prefer university / same-field posts
+    # Mild preference for the home university / same-field posts
     if "eduhk" in job.get("official_link", "") or "university" in job.get("employer", "").lower():
         raw += 1
     stars = 1 if raw >= 1 else 0
     stars = 2 if raw >= 4 else stars
     stars = 3 if raw >= 7 else stars
     stars = max(stars, 1)
-    reason = "matched keywords: " + ", ".join(hits[:6]) if hits else "general AI/data post"
+    reason = "matched: " + ", ".join(hits[:6]) if hits else "general post"
     return stars, f"Category = {cat_name}; {reason}"
 
 
@@ -343,12 +408,17 @@ def run() -> list[dict]:
         cat, cat_score = assign_category(job)
         job["category"] = cat
         job["category_name"] = config.CATEGORIES[cat]["name"]
+        # Fetch JD text once (PDF for official posts, page HTML for board /
+        # careers pages) and build the short description early, so fit scoring and
+        # the relevance gate use the real content rather than the title alone.
+        jd_text = _get_jd_text(job)
+        job["description"] = _build_description(job, jd_text)
         stars, reason = fit_score(job, cat_score)
         job["ai_edtech_fit"] = stars
         job["fit_reason"] = reason
-        # Relevance gate (based on the title, to avoid department keywords
-        # wrongly letting administrative roles through): if the title matches no
-        # direction keyword and no role-relevance keyword, it is off-target.
+        # Relevance gate: the post must contain at least one role-type or
+        # competency keyword (bilingual). This blocks generic pages that only say
+        # "education / learning" without an actual open role.
         title_l = job.get("title", "").lower()
         snippet = (job.get("description") or "").lower()
         cat_title_score = sum(
@@ -356,13 +426,20 @@ def run() -> list[dict]:
             for kw in meta["keywords"] if kw in title_l or kw in snippet
         )
         rel_hit = any(k in title_l or k in snippet for k in config.RELEVANCE_KEYWORDS)
-        # Require at least one positive hit in title or snippet; otherwise exclude
         if cat_title_score == 0 and not rel_hit:
             job["status"] = "excluded"
             job["excluded_reason"] = "No keyword match with the AI/EdTech/data/teaching directions"
             seen[_dedupe_key(job)] = job
             continue
-        jd_text = _get_jd_text(job)
+        # Staleness / expiry: drop posts whose deadline has passed, or that have no
+        # closing date and were posted long ago (the HTTP-200 liveness check alone
+        # cannot tell a still-hosted but long-closed PDF from a live one).
+        stale, why = staleness(job)
+        if stale:
+            job["status"] = "excluded"
+            job["excluded_reason"] = why
+            seen[_dedupe_key(job)] = job
+            continue
         keep, why = compliance_check(job, jd_text=jd_text)
         job["compliance_note"] = why
         if not keep:
@@ -370,8 +447,7 @@ def run() -> list[dict]:
             job["excluded_reason"] = why
             seen[_dedupe_key(job)] = job
             continue
-        # Description + tags (for the student page)
-        job["description"] = _build_description(job, jd_text)
+        # Tags (for the student page)
         job["tags"] = assign_tags(job)
         verify(job)
         k = _dedupe_key(job)

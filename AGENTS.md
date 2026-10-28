@@ -95,7 +95,7 @@ For questions or takedown requests, contact: <email>
 ## 3. Recommended technical architecture (two scheduling options, see section 6 for trade-offs)
 
 ```
-[1 Discovery] University official vacancy pages + jobs.gov.hk: direct crawl (low-frequency, compliant)
+[1 Discovery] University official vacancy pages (EdUHK implemented; other universities are framework placeholders) + jobs.gov.hk: jobs.gov.hk is NOT direct-crawled — its robots.txt disallows it (see §5 pitfall #10)
           Commercial job boards: discovered through search-engine indexing -> post URL (no direct scrape, no verification bypass)
    ↓
 [2 Parsing] Extract fields (title / employer / location / degree / experience / AI attributes / posted date / deadline / original link)
@@ -137,6 +137,8 @@ posted_date, deadline, verified_date, status (active|expired|unknown), notes
 
 ## 4. Existing MVP (reference implementation; keep or discard)
 
+> **Status update (2026-10-28):** the implementation has since evolved well beyond this MVP and is **live**. Notable changes versus the snapshot below: `search_discovery.py` now uses the Tavily search API (no `seeds.json` fallback — it uses stored `data/discovered.json` leads instead); the student page uses a **multi-tag** system rather than the fixed five-category sections; `verify.py` was merged into `fetch.py`; and deployment is handled by **GitHub Actions** (`.github/workflows/deploy.yml`), not `deploy.py`. See §7 for the current to-do status.
+
 A working implementation exists inside the sandbox, files under `/workspace`:
 
 ```
@@ -171,7 +173,9 @@ verification-report.md              # verification record that scheduling is exe
 6. **GitHub authentication**: POST to github.com inside the sandbox **times out** (GET works), device-code OAuth is unavailable -> GitHub write operations are handed to the **cloud runtime / a user-provided PAT (repo scope)**; do not force OAuth inside the sandbox.
 7. **JobsDB 30-day expiry**: board deep links cannot be stored long-term; they must be **re-discovered daily**, with the official link as the anchor.
 8. **Some small/medium EdTech firms have no self-hosted official post** (e.g. eClass, Popular e-Learning, BYTEWISE): the official site only has a brand page -> provide only "official homepage + official email" and **label it honestly**.
-9. **Quality over coverage**: after giving up direct scraping / verification bypass, commercial-board coverage is lower than full direct scraping — this is the trade-off bought by compliance and is acceptable (university pages and jobs.gov.hk remain stable direct-crawl fallbacks).
+9. **Quality over coverage**: after giving up direct scraping / verification bypass, commercial-board coverage is lower than full direct scraping — this is the trade-off bought by compliance and is acceptable (university pages remain stable direct-crawl fallbacks).
+
+10. **`jobs.gov.hk` cannot be direct-crawled**: its `robots.txt` returns `Disallow: /` for all agents, and the vacancy detail path (`/isps/Web/WebForm/JobSeeker/Job/*`) plus the JSON API (`/0/api/*`) are explicitly disallowed. Per the compliance rule (§2.3 — skip when robots forbids), **do not build a jobs.gov.hk crawler**. Treat it only as a search-discovered lead (re-verified daily) if a genuine individual vacancy is found via Tavily; given the token-link redirect / advert risk (pitfall #1), prefer omitting it whenever it cannot be verified against the official source.
 
 ---
 
@@ -192,16 +196,18 @@ The original methodology recommended **GitHub Actions** (daily cron triggers the
 
 ## 7. To-do list (hand to the next agent)
 
-- [ ] Decide on scheduling: GitHub Actions (recommended) or fix the WorkBuddy scheduled task.
-- [ ] Rebuild / complete the crawler (9+ university adapters + jobs.gov.hk, compliant direct crawl).
-- [ ] Rebuild the search-discovery module (call a search API to find commercial-board post URLs, no direct scrape, no verification bypass).
-- [ ] Official-link parsing and liveness check (404 / Expired detection).
-- [ ] Compliance filter + ⭐ scoring + sorting + deduplication.
-- [ ] GitHub Pages template (five-direction sections, ⭐, dual links, anti-scam and compliance sections).
-- [ ] `.github/workflows/daily.yml` (if Actions is chosen): daily cron discovery + verification + deployment.
-- [ ] Run end-to-end once, output the day's report, confirm official-page crawl / search discovery / verification are feasible.
-- [ ] **Review period**: do not push first; let the user observe for a few days; only create the repository + enable push after confirmation.
-- [ ] Provide "deploy to your own GitHub repository" instructions + a README compliance-statement template.
+> Status verified 2026-10-28 by running the pipeline end-to-end. Items already delivered are marked done; remaining gaps are noted.
+
+- [x] Decide on scheduling: **GitHub Actions chosen** — implemented as `.github/workflows/deploy.yml` (daily cron 07:00 HKT + push trigger; co-located with Pages, uses the built-in `GITHUB_TOKEN`, no extra PAT injection). The legacy WorkBuddy scheduled task (`13622729`) was superseded and should be removed.
+- [ ] Rebuild / complete the crawler — **partial**: EdUHK fully implemented and verified (69 posts/run). `jobs.gov.hk` is ruled out by `robots.txt` (`Disallow: /`) + session-token gating (see §5 pitfall #10) — do **not** crawl it. The other 8 universities (HKU / CUHK / HKUST / PolyU / CityU / HKBU / Lingnan / HKSYU) remain framework placeholders in `live.py`; connecting them is blocked by JS-shell / certificate / gateway issues and is lower priority than compliance.
+- [x] Rebuild the search-discovery module — done via the Tavily search API (`search_discovery.py`); falls back to stored `data/discovered.json` when no key is set (never fabricates).
+- [x] Official-link parsing and liveness check — done in `fetch.py` (`is_live` HEAD/GET + board expired-marker detection).
+- [x] Compliance filter + ⭐ scoring + sorting + deduplication — done in `pipeline.py` (PDF/HTML JD deep-check, negative keywords, academic/experience/degree rejection, multi-tag, dedupe).
+- [x] GitHub Pages template — done in `generate.py` (`site/index.html`: multi-tag filtering, ⭐, dual links, anti-scam + compliance panels; reads `./jobs.json` with embedded backup).
+- [x] `.github/workflows/deploy.yml` — done (daily cron discovery + verification + Pages deploy via `GITHUB_TOKEN`).
+- [x] Run end-to-end once — verified 2026-10-28: EdUHK crawl 69 → 14 active / 72 after dedupe; all artifacts (`site/index.html`, `site/jobs.json`, `data/jobs.json`, `REPORT.md`) generated; local run does not push (Actions deploys).
+- [x] **Review period** — superseded: the site is live at https://drhycheung.github.io/AIETJobs/ and refreshed nightly by Actions.
+- [x] "Deploy to your own GitHub repository" instructions + README compliance-statement template — done (README).
 
 ### Anti-scam safeguards (written into a fixed page section)
 - Red flags: upfront fee / deposit, requesting ID or bank details, personal-email contact, salary clearly off market.

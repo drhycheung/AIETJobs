@@ -38,7 +38,10 @@ COMMERCIAL_BOARDS = {
     "cpjobs.com": "CPjobs",
 }
 
-# Hong Kong Labour Department official site (directly and compliantly scrapeable)
+# Hong Kong Labour Department official site. Whitelisted as an official source, but
+# its robots.txt returns `Disallow: /` and vacancy pages are session-token gated, so it
+# is NOT direct-crawled (compliance rule: skip when robots forbids). It may appear only
+# as a search-discovered lead, re-verified daily, like the commercial boards.
 GOV_SOURCES = {
     "jobs.gov.hk": "Hong Kong Labour Department jobs.gov.hk",
 }
@@ -87,18 +90,26 @@ TAVILY_DAILY_QUERY_LIMIT = 18   # ~540 searches per month, leaving half the allo
 # Queries are written in the language recruiters actually use, so that both
 # Chinese-language and English-language recruitment pages are found.
 DISCOVERY_QUERIES = [
+    # Core: AI / EdTech companies hiring fresh graduates
     "香港 人工智能 教育 公司 招聘 應屆畢業生",
-    "香港 教育科技 公司 招聘 人工智能 工程師",
-    "香港 大學 教學助理 人工智能 招聘",
-    "香港 STEM 導師 招聘 應屆畢業生",
-    "香港 數據分析 見習生 招聘 應屆畢業生",
-    "香港 多媒體 設計 教育 招聘 應屆畢業生",
-    "香港 中小學 資訊科技 教學助理 招聘",
+    "香港 教育科技 公司 招聘 人工智能 工程師 畢業生",
     "Hong Kong EdTech company careers AI engineer graduate",
     "Hong Kong AI startup careers hiring fresh graduate machine learning",
+    # Attractive, concrete graduate trainee programmes (tech / data / digital)
+    "香港 科技 畢業培訓生計劃 應屆畢業生 資訊科技 2027",
+    "香港 數碼 資訊科技 畢業培訓生 招聘 2027",
+    "Hong Kong technology graduate trainee programme 2027 AI data",
+    "Hong Kong bank graduate programme technology information technology",
+    # University research / learning-tech roles
+    "香港 大學 研究助理 人工智能 招聘 應屆",
     "Hong Kong university research assistant artificial intelligence vacancy",
-    "Hong Kong education technology developer vacancy apply graduate",
-    "Hong Kong data annotation transcription entry level careers",
+    # Schools / STEM teaching (with PGDE pathway)
+    "香港 STEM 導師 招聘 應屆畢業生 PGDE",
+    "香港 中小學 資訊科技 教學助理 招聘",
+    "Hong Kong international school STEM teacher AI computing graduate",
+    # Data / analytics entry level
+    "香港 數據分析 見習生 招聘 應屆畢業生",
+    "Hong Kong data analyst graduate programme entry level careers",
 ]
 
 # Official vacancy / recruitment pages of Hong Kong universities (whitelisted,
@@ -148,10 +159,13 @@ CATEGORIES = {
     2: {
         "name": "AI & EdTech industry",
         "en": "AI & EdTech industry",
-        "examples": "EdTech company AI developer, Education Product Engineer",
+        "examples": "EdTech company AI developer, Education Product Engineer, "
+                    "Tech / IT graduate trainee programme",
         "keywords": [
             "edtech", "education technology", "教育科技", "ai education",
             "教育", "教学", "ai 教學", "教學",
+            "科技", "資訊科技", "數碼", "軟件", "軟體", "工程", "developer",
+            "engineer", "engineering", "程式", "it", "software", "技術",
         ],
     },
     3: {
@@ -214,24 +228,60 @@ FIT_KEYWORDS = [
 ]
 
 # ---------------------------------------------------------------------------
-# Relevance gate: matching any keyword marks the post as relevant to the
-# AI/EdTech/data/teaching directions. This lets through technical / internship /
-# research roles (IT Intern, Research Assistant, Developer) while blocking generic
-# administrative roles (Executive Officer, Residential Officer).
+# Relevance gate: the post must contain at least one *role type* or *competency*
+# keyword (bilingual) before it is shown. This lets through technical / internship
+# / research / teaching / AI & EdTech roles while blocking generic pages that only
+# say "education / learning" without any actual open role (e.g. a government
+# directory page or a company about page with no vacancy).
+#
+# Design notes (29 Oct 2026):
+# - Bilingual on purpose: the previous English-only list wrongly excluded genuine
+#   Chinese-language Hong Kong posts (e.g. Cathay Pacific "數碼及資訊科技畢業培訓生計劃")
+#   while the loose tokens (" it ", " smart ", " language ") let generic pages through.
+# - A bare "ai" substring is intentionally avoided (it matches "available", "email");
+#   AI is matched by the `fit_score` word-boundary regex instead.
 # ---------------------------------------------------------------------------
 RELEVANCE_KEYWORDS = [
-    "intern", "research assistant", "trainee", "developer", "programmer",
-    "engineer", "analyst", "multimedia", "data", " ai ", "machine learning",
-    "education", "teaching", "learning", "stem", "software", "programming",
-    "technology", "digital", "it ", "computer", "science", "edtech",
-    "artificial intelligence", "language", "smart",
+    # role types (English) — specific, not bare "officer"/"assistant"
+    "intern", "internship", "trainee", "graduate programme", "graduate trainee",
+    "grad scheme", "graduate scheme", "research assistant", "developer",
+    "programmer", "engineer", "engineering", "analyst", "designer",
+    "curriculum", "educator", "instructor", "multimedia", "data analyst",
+    "data scientist", "software", "technical assistant", "it assistant",
+    # role types (Chinese) — specific, not bare "助理"
+    "實習", "見習", "培訓生", "畢業", "研究助理", "研究", "教學助理",
+    "主任", "專員", "工程師", "分析員", "設計", "教師", "講師", "課程",
+    "技術員", "程式設計", "程序員",
+    # competencies (English)
+    "machine learning", "deep learning", "nlp", "computer vision", "genai",
+    "data science", "data analytics", "big data", "python", "programming",
+    "edtech", "education technology", "stem", "digital", "technology",
+    # competencies (Chinese)
+    "人工智能", "人工智慧", "機器學習", "教育科技", "資訊科技", "數碼", "科技",
+    "數據", "軟件", "軟體", "開發", "工程", "演算法", "算法", "雲端", "雲",
+    "前端", "後端", "全端", "web", "多媒體",
+    # domain anchors
+    "teaching", "教學", "教学", "教育",
 ]
 
-# Negative title keywords: immediate rejection if title contains any of these
+# Posts with no closing date and posted more than this many days ago are treated as
+# stale (the liveness check only does HTTP 200, which a still-hosted but long-closed
+# PDF passes forever). See pipeline.staleness.
+STALE_POST_DAYS = 60
+
+# Negative title keywords: immediate rejection if title contains any of these.
+# These are administrative / non-technical roles that are off-target for a
+# BSc(AI&EdTech) fresh-graduate board, plus clearly out-of-scope fields (economics).
 NEGATIVE_TITLE_KEYWORDS = [
     "sales", "customer service", "account", "marketing", "branch", "store",
     "reception", "cashier", "barista", "waiter", "waitress", "driver",
     "personal assistant", "pa ", "administrative assistant", "admin officer",
+    # Administrative / hall / clerical roles at universities
+    "executive officer", "residential officer", "project officer",
+    "administrative officer", "management officer", "clerical",
+    "executive assistant", "residential", "warden", "secretary",
+    # Out-of-scope fields for an AI x EdTech board
+    "economist", "經濟師",
 ]
 
 # ---------------------------------------------------------------------------
