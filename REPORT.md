@@ -3,9 +3,9 @@
 > This file is for maintainers only (includes filtering details). The student page `site/index.html` contains no filtered / pending-review information.
 
 - Target audience: EdUHK BSc(AI&EdTech) fresh graduates
-- Raw crawled: 70 posts
-- **Shown on student page (active): 11 posts**
-- Auto-filtered / pending review: 59 posts
+- Raw crawled: 72 posts
+- **Shown on student page (active): 14 posts**
+- Auto-filtered / pending review: 58 posts
 
 ## ✅ Jobs shown to students today
 
@@ -16,17 +16,20 @@
 - ⭐2 **Graduate STEM Developer - Hong Kong** — dataintellect.com · tags: Artificial Intelligence, Industry, Fresh-graduate friendly · Deadline N/A · [Tavily search](https://dataintellect.com/join-us/job?smid=743999909655143)
 - ⭐1 **Research Assistant I** — The Education University of Hong Kong (EdUHK) · Department of Psychology · tags: University, Fresh-graduate friendly · Deadline 04 Nov 2026 · [EdUHK official vacancies](https://eduhk.hk/cms/f/career/35092/RAI_PS_2600923.pdf)
 - ⭐1 **Research Assistant I/II (Part-time)** — The Education University of Hong Kong (EdUHK) · Department of Social Sciences and Policy Studies · tags: University, Intern / Trainee, Fresh-graduate friendly · Deadline 06 Nov 2026 · [EdUHK official vacancies](https://eduhk.hk/cms/f/career/35073/RAI_RAII_SSPS_2600932.pdf)
+- ⭐1 **EDU A.I. 人才招聘** — www.eduai.org · tags: Artificial Intelligence, Industry, Fresh-graduate friendly · Deadline N/A · [Tavily search](https://www.eduai.org/about-us/career)
 - ⭐1 **官立中學及小學非公務員職位空缺 - 教育局** — www.edb.gov.hk · tags: Teaching, Industry, Fresh-graduate friendly · Deadline N/A · [Tavily search](https://www.edb.gov.hk/tc/about-edb/info/recruitment/NCSC-Vacancy/Index_NCSC.html)
+- ⭐1 **AI 教學助理一名- 蘇浙公學** — jobs.ctgoodjobs.hk · tags: Artificial Intelligence, Educational Technology, Teaching, Industry, Fresh-graduate friendly · Deadline N/A · [Tavily search](https://jobs.ctgoodjobs.hk/job/10283496/ai-%E6%95%99%E5%AD%B8%E5%8A%A9%E7%90%86%E4%B8%80%E5%90%8D)
 - ⭐1 **Software Engineering Graduate Programme in Hong Kong** — careers.fdmgroup.com · tags: Industry, Fresh-graduate friendly · Deadline N/A · [Tavily search](https://careers.fdmgroup.com/vacancies/839/software-engineering-graduate-programme.html)
+- ⭐1 **Data Engineering Graduate Programme  in Hong Kong - FDM Group** — careers.fdmgroup.com · tags: Industry, Fresh-graduate friendly · Deadline N/A · [Tavily search](https://careers.fdmgroup.com/vacancies/2541/data-engineering-graduate-programme.html)
 - ⭐1 **Software Engineering Graduate Programme │ International students│Hong Kong based  in Hong Kong - FDM Group** — careers.fdmgroup.com · tags: Industry, Intern / Trainee, Fresh-graduate friendly · Deadline N/A · [Tavily search](https://careers.fdmgroup.com/vacancies/1721/software-engineering-graduate-programme--international-students-hong-kong-based.html)
 - ⭐1 **IT Intern (Programming) (Part-time)** — The Education University of Hong Kong (EdUHK) · Office of the Chief Information Officer · tags: University, Intern / Trainee, Fresh-graduate friendly · Deadline N/A · [EdUHK official vacancies](https://eduhk.hk/cms/f/career/32500/SH_OCIO_2501246.pdf)
 
 ## 🚫 Auto-filter reason breakdown (not shown to students; maintainers only)
 
-- 41 posts: No keyword match with the AI/EdTech/data/teaching directions
-- 13 posts: Academic/faculty post (usually requires a PhD): 'professor'
+- 40 posts: No keyword match with the AI/EdTech/data/teaching directions
+- 12 posts: Academic/faculty post (usually requires a PhD): 'professor'
 - 4 posts: Academic/faculty post (usually requires a PhD): 'head of'
-- 1 posts: None
+- 2 posts: Negative title keyword
 
 ## ⚠️ To-do / notes
 
